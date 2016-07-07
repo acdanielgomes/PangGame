@@ -35,4 +35,5 @@ public class PangGame extends Game{
 		super.dispose();
 		batch.dispose();
 	}
+
 }
