@@ -10,29 +10,37 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import org.academiadecodigo.hackaton.pang.screens.MenuScreen;
 
-public class PangGame extends Game{
-	public static final int V_WIDTH = 1080;
-	public static final int V_HEIGHT = 600;
+public class PangGame extends Game {
+    public static final int V_WIDTH = 1080;
+    public static final int V_HEIGHT = 600;
+    public static final float PPM = 100;
+    public static final float PLAYER_WIDTH = 50;
+    public static final float PLAYER_HEIGHT = 100;
+    public static final float PLAYER_SPEED = 4f;
 
-	public SpriteBatch batch;
-	private AssetManager manager;
+    public SpriteBatch getBatch() {
+        return batch;
+    }
 
-	@Override
-	public void create () {
-		batch = new SpriteBatch();
+    public SpriteBatch batch;
+    private AssetManager manager;
 
-		setScreen(new MenuScreen(this, manager));
+    @Override
+    public void create() {
+        batch = new SpriteBatch();
 
-	}
+        setScreen(new MenuScreen(this, manager));
 
-	@Override
-	public void render () {
-		super.render();
-	}
-	
-	@Override
-	public void dispose () {
-		super.dispose();
-		batch.dispose();
-	}
+    }
+
+    @Override
+    public void render() {
+        super.render();
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+        batch.dispose();
+    }
 }
