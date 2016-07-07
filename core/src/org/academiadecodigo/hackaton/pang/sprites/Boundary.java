@@ -2,6 +2,7 @@ package org.academiadecodigo.hackaton.pang.sprites;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import org.academiadecodigo.hackaton.pang.PangGame;
 import org.academiadecodigo.hackaton.pang.screens.PlayScreen;
@@ -9,7 +10,7 @@ import org.academiadecodigo.hackaton.pang.screens.PlayScreen;
 /**
  * Created by codecadet on 07/07/16.
  */
-public class Ball extends Sprite {
+public class Boundary extends Sprite {
 
     // Manages all physics GameObjects
     private World world;
@@ -21,37 +22,34 @@ public class Ball extends Sprite {
     private Fixture fixture;
 
     /**
-     * Constructor of a ball
-     * Set texture, size
-     * and reference to the game world
+     * Constructor of a boundary
+     * Set texture, size and
+     * reference to the game world
      *
      * @param playScreen Game references
+     * @param posX
+     * @param posY
+     * @param height
+     * @param width
      */
-    public Ball(PlayScreen playScreen) {
-        super(new Texture("badlogic.jpg"));
+    public Boundary(PlayScreen playScreen, int posX, int posY, float width, float height) {
+        super(new Texture("BOUNDARY_URL"));
 
         world = playScreen.getWorld();
 
-        float ballSize = PangGame.BALL_RADIUS * 2 / PangGame.PPM;
-        setSize(ballSize, ballSize);
+        setSize(width, height);
 
-        defineBall();
+        defineBoundary(posX, posY);
     }
 
     /**
-     * Update properties of the ball
+     * Define the boundary characteristics
      *
-     * @param delta Time since the last update
+     * @param posX
+     * @param posY
      */
-    public void update(float delta) {
-        setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
-    }
-
-    /**
-     * Define the ball characteristics
-     */
-    private void defineBall() {
-        body = setBodyDef();
+    private void defineBoundary(int posX, int posY) {
+        body = setBodyDef(posX, posY);
         setFixtureDef();
     }
 
@@ -59,15 +57,17 @@ public class Ball extends Sprite {
      * Creates a body with a set of definitions
      * Sets the position and the body type
      *
+     * @param posX
+     * @param posY
      * @return
      */
-    private Body setBodyDef() {
+    private Body setBodyDef(int posX, int posY) {
         // Holds all the data needed to construct a rigid body
         BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set(PangGame.V_WIDTH / 2 / PangGame.PPM, PangGame.V_HEIGHT / 2 / PangGame.PPM);
+        bodyDef.position.set(posX / PangGame.PPM, posY / PangGame.PPM);
 
         // Velocity determined by forces
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.type = BodyDef.BodyType.StaticBody;
         return world.createBody(bodyDef);
     }
 
@@ -79,16 +79,22 @@ public class Ball extends Sprite {
     private void setFixtureDef() {
         FixtureDef fdef = new FixtureDef();
 
-        CircleShape shape = new CircleShape();
+        PolygonShape shape = new PolygonShape();
         shape.setRadius(PangGame.BALL_RADIUS / PangGame.PPM);
+        Vector2[] vertice = new Vector2[4];
+        vertice[0] = new Vector2(-PangGame.V_WIDTH / 2, 10).scl(1 / PangGame.PPM);
+        vertice[1] = new Vector2(-PangGame.V_WIDTH / 2, 0).scl(1 / PangGame.PPM);
+        vertice[2] = new Vector2(PangGame.V_WIDTH / 2, 10).scl(1 / PangGame.PPM);
+        vertice[3] = new Vector2(PangGame.V_WIDTH / 2, 0).scl(1 / PangGame.PPM);
+        shape.set(vertice);
 
         // For collision detection
-//        fdef.filter.categoryBits = PangGame.BALL_BIT;                                           // Define who is it
+//        fdef.filter.categoryBits = PangGame.BOUNDARY_BIT;                                          // Define who is it
 //        fdef.filter.maskBits = PangGame.BLOCK_BIT | PangGame.EDGE_BIT | PangGame.PADDLE_BIT;    // Define with whom can collide
 
         // Define material properties
         fdef.shape = shape;
-        fdef.restitution = 1f;          // Bounciness of the ball
+        fdef.restitution = 0f;          // Bounciness of the material
         fdef.friction = 0f;
 
         fixture = body.createFixture(fdef);
