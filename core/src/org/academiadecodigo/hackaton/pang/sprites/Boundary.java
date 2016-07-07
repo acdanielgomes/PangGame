@@ -82,15 +82,15 @@ public class Boundary extends Sprite {
         PolygonShape shape = new PolygonShape();
         shape.setRadius(PangGame.BALL_RADIUS / PangGame.PPM);
         Vector2[] vertice = new Vector2[4];
-        vertice[0] = new Vector2(-PangGame.V_WIDTH / 2, 10).scl(1 / SuperPaddle.PPM);
-        vertice[1] = new Vector2(-PangGame.V_WIDTH / 2, 0).scl(1 / SuperPaddle.PPM);
-        vertice[2] = new Vector2(PangGame.V_WIDTH / 2, 10).scl(1 / SuperPaddle.PPM);
-        vertice[3] = new Vector2(PangGame.V_WIDTH / 2, 0).scl(1 / SuperPaddle.PPM);
+        vertice[0] = new Vector2(-PangGame.V_WIDTH / 2, 10).scl(1 / PangGame.PPM);
+        vertice[1] = new Vector2(-PangGame.V_WIDTH / 2, 0).scl(1 / PangGame.PPM);
+        vertice[2] = new Vector2(PangGame.V_WIDTH / 2, 10).scl(1 / PangGame.PPM);
+        vertice[3] = new Vector2(PangGame.V_WIDTH / 2, 0).scl(1 / PangGame.PPM);
         shape.set(vertice);
 
         // For collision detection
-        fdef.filter.categoryBits = PangGame.BOUNDARY_BIT;                                          // Define who is it
-        fdef.filter.maskBits = PangGame.BLOCK_BIT | PangGame.EDGE_BIT | PangGame.PADDLE_BIT;    // Define with whom can collide
+//        fdef.filter.categoryBits = PangGame.BOUNDARY_BIT;                                          // Define who is it
+//        fdef.filter.maskBits = PangGame.BLOCK_BIT | PangGame.EDGE_BIT | PangGame.PADDLE_BIT;    // Define with whom can collide
 
         // Define material properties
         fdef.shape = shape;

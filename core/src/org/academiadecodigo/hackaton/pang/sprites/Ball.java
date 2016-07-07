@@ -28,7 +28,7 @@ public class Ball extends Sprite {
      * @param playScreen Game references
      */
     public Ball(PlayScreen playScreen) {
-        super(new Texture("BALL_URL"));
+        super(new Texture("badlogic.jpg"));
 
         world = playScreen.getWorld();
 
@@ -83,8 +83,8 @@ public class Ball extends Sprite {
         shape.setRadius(PangGame.BALL_RADIUS / PangGame.PPM);
 
         // For collision detection
-        fdef.filter.categoryBits = PangGame.BALL_BIT;                                           // Define who is it
-        fdef.filter.maskBits = PangGame.BLOCK_BIT | PangGame.EDGE_BIT | PangGame.PADDLE_BIT;    // Define with whom can collide
+//        fdef.filter.categoryBits = PangGame.BALL_BIT;                                           // Define who is it
+//        fdef.filter.maskBits = PangGame.BLOCK_BIT | PangGame.EDGE_BIT | PangGame.PADDLE_BIT;    // Define with whom can collide
 
         // Define material properties
         fdef.shape = shape;

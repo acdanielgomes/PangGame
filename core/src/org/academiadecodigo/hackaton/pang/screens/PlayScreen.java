@@ -6,6 +6,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -47,69 +48,73 @@ public class PlayScreen implements Screen {
 
     private void init() {
         cam = new OrthographicCamera();
+        cam.setToOrtho(false, PangGame.V_WIDTH / 2 / PangGame.PPM, PangGame.V_HEIGHT / 2 / PangGame.PPM);
+
         port = new FitViewport(PangGame.V_WIDTH / PangGame.PPM, PangGame.V_HEIGHT / PangGame.PPM, cam);
         cam.position.set(port.getWorldWidth() / 2, port.getWorldHeight() / 2, 0);
 
-        balls = new Array<Ball>();
-        player1 = new Player(this, 0, POS_PLAYER1);
-        player2 = new Player(this, 0, POS_PLAYER2);
-
-        world = new World(new Vector2(0, 10f), true);
+        world = new World(new Vector2(0f, -9.8f), true);
         world.setContactListener(new CollisionDetector());
 
+        balls = new Array<Ball>();
+        balls.add(new Ball(this));
+
+        renderer = new Box2DDebugRenderer();
+//        player1 = new Player(this, 0, POS_PLAYER1);
+//        player2 = new Player(this, 0, POS_PLAYER2);
 
     }
 
-    private void handleInput(float dt) {
-        handlePlayer1Input();
-        handlePlayer2Input();
-    }
+//    private void handleInput(float dt) {
+//        handlePlayer1Input();
+//        handlePlayer2Input();
+//    }
+//
+//    private void handlePlayer1Input() {
+//        if (Gdx.input.isKeyPressed(Input.Keys.Z)) {
+//            player1.getBody().setLinearVelocity(-PangGame.PLAYER_SPEED, 0);
+//        } else if (Gdx.input.isKeyPressed(Input.Keys.X)) {
+//            player1.getBody().setLinearVelocity(PangGame.PLAYER_SPEED, 0);
+//        } else {
+//            Vector2 p1Vel = player1.getBody().getLinearVelocity();
+//            if (p1Vel.x != 0 || p1Vel.y != 0) {
+//                setToSteady(player1);
+//            }
+//        }
+//        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+//            player1.shoot();
+//        }
+//    }
 
-    private void handlePlayer1Input() {
-        if (Gdx.input.isKeyPressed(Input.Keys.Z)) {
-            player1.getBody().setLinearVelocity(-PangGame.PLAYER_SPEED, 0);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.X)) {
-            player1.getBody().setLinearVelocity(PangGame.PLAYER_SPEED, 0);
-        } else {
-            Vector2 p1Vel = player1.getBody().getLinearVelocity();
-            if (p1Vel.x != 0 || p1Vel.y != 0) {
-                setToSteady(player1);
-            }
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            player1.shoot();
-        }
-    }
-
-    private void handlePlayer2Input() {
-        if (Gdx.input.isKeyPressed(Input.Keys.M)) {
-            player2.getBody().setLinearVelocity(-PangGame.PLAYER_SPEED, 0);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.COMMA)) {
-            player2.getBody().setLinearVelocity(PangGame.PLAYER_SPEED, 0);
-        } else {
-            Vector2 p2Vel = player2.getBody().getLinearVelocity();
-            if (p2Vel.x != 0 || p2Vel.y != 0) {
-                setToSteady(player2);
-            }
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) {
-            player2.shoot();
-        }
-    }
-
-    private void setToSteady(Player player) {
-        player.getBody().setLinearVelocity(0, 0);
-    }
+//    private void handlePlayer2Input() {
+//        if (Gdx.input.isKeyPressed(Input.Keys.M)) {
+//            player2.getBody().setLinearVelocity(-PangGame.PLAYER_SPEED, 0);
+//        } else if (Gdx.input.isKeyPressed(Input.Keys.COMMA)) {
+//            player2.getBody().setLinearVelocity(PangGame.PLAYER_SPEED, 0);
+//        } else {
+//            Vector2 p2Vel = player2.getBody().getLinearVelocity();
+//            if (p2Vel.x != 0 || p2Vel.y != 0) {
+//                setToSteady(player2);
+//            }
+//        }
+//        if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) {
+//            player2.shoot();
+//        }
+//    }
+//
+//    private void setToSteady(Player player) {
+//        player.getBody().setLinearVelocity(0, 0);
+//    }
 
     private void update(float dt) {
-        handleInput(dt);
+//        handleInput(dt);
         world.step(1 / 60f,6, 2);
 
         for (Ball ball : balls) {
             ball.update(dt);
         }
-        player1.update(dt);
-        player2.update(dt);
+//        player1.update(dt);
+//        player2.update(dt);
 
         cam.update();
     }
@@ -130,8 +135,14 @@ public class PlayScreen implements Screen {
 
         game.getBatch().setProjectionMatrix(cam.combined);
         game.getBatch().begin();
-        //game.getBatch().draw();
+
+        balls.get(0).draw(game.getBatch());
+
         game.getBatch().end();
+    }
+
+    public World getWorld() {
+        return world;
     }
 
     @Override
