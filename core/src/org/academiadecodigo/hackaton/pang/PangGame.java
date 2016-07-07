@@ -19,6 +19,7 @@ public class PangGame extends Game {
     public static final float PLAYER_HEIGHT = 50;
     public static final float PLAYER_SPEED = 4f;
     public static final float BALL_RADIUS = 12.5f;
+    public static final float BOUNDARY_THICKNESS = 23;
 
     public SpriteBatch getBatch() {
         return batch;

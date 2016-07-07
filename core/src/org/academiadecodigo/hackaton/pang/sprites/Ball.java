@@ -2,6 +2,8 @@ package org.academiadecodigo.hackaton.pang.sprites;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import org.academiadecodigo.hackaton.pang.PangGame;
 import org.academiadecodigo.hackaton.pang.screens.PlayScreen;
@@ -20,6 +22,10 @@ public class Ball extends Sprite {
     // Describes properties(size, shape) of an object
     private Fixture fixture;
 
+    private Ball previousBall;
+
+    private int sizeBall;
+
     /**
      * Constructor of a ball
      * Set texture, size
@@ -27,12 +33,18 @@ public class Ball extends Sprite {
      *
      * @param playScreen Game references
      */
-    public Ball(PlayScreen playScreen) {
+    public Ball(PlayScreen playScreen, Ball previousBall) {
         super(new Texture("badlogic.jpg"));
 
         world = playScreen.getWorld();
 
-        float ballSize = PangGame.BALL_RADIUS * 2 / PangGame.PPM;
+        if (previousBall == null) {
+            sizeBall = 1;
+        } else {
+            sizeBall = previousBall.getSizeBall() + 1;
+        }
+
+        float ballSize = (PangGame.BALL_RADIUS * 2 / PangGame.PPM) / sizeBall;
         setSize(ballSize, ballSize);
 
         defineBall();
@@ -52,6 +64,7 @@ public class Ball extends Sprite {
      */
     private void defineBall() {
         body = setBodyDef();
+        body.applyLinearImpulse(new Vector2(10f * MathUtils.randomSign(), 0), body.getWorldCenter(), true);
         setFixtureDef();
     }
 
@@ -64,6 +77,7 @@ public class Ball extends Sprite {
     private Body setBodyDef() {
         // Holds all the data needed to construct a rigid body
         BodyDef bodyDef = new BodyDef();
+
         bodyDef.position.set(PangGame.V_WIDTH / 2 / PangGame.PPM, PangGame.V_HEIGHT / 2 / PangGame.PPM);
 
         // Velocity determined by forces
@@ -80,7 +94,7 @@ public class Ball extends Sprite {
         FixtureDef fdef = new FixtureDef();
 
         CircleShape shape = new CircleShape();
-        shape.setRadius(PangGame.BALL_RADIUS / PangGame.PPM);
+        shape.setRadius(PangGame.BALL_RADIUS / PangGame.PPM / sizeBall);
 
         // For collision detection
 //        fdef.filter.categoryBits = PangGame.BALL_BIT;                                           // Define who is it
@@ -93,6 +107,10 @@ public class Ball extends Sprite {
 
         fixture = body.createFixture(fdef);
         fixture.setUserData(this);
+    }
+
+    public int getSizeBall() {
+        return sizeBall;
     }
 
     /**
