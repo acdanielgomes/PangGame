@@ -15,28 +15,37 @@ import org.academiadecodigo.hackaton.pang.screens.PlayScreen;
 public class Player extends Sprite {
 
     public World world;
-    public Body b2Body;
+
+    public Body getBody() {
+        return b2Body;
+    }
+
+    private Body b2Body;
     public Fixture fixture;
 
-    public Player(PlayScreen screen, float x){
+    public Player(PlayScreen screen, float x, float y) {
 
-        super(new Texture("")); // TODO: 07/07/16 player image
+        super(new Texture("badlogic.jpg")); // TODO: 07/07/16 player image
         this.world = screen.getWorld();
-        this.setSize(this.getWidth() / PangGame.PPM, this.getHeight() / PangGame.PPM);
+        this.setSize(PangGame.PLAYER_WIDTH / PangGame.PPM, PangGame.PLAYER_HEIGHT / PangGame.PPM);
 
-        definePlayer(x);
+        definePlayer(x, y);
 
     }
 
-    public void update(float dt){
+    public void update(float dt) {
 
         setPosition(b2Body.getPosition().x - getWidth() / 2, b2Body.getPosition().y - getHeight() / 2);
     }
 
-    public void definePlayer(float x){
+    public void definePlayer(float x, float y) {
 
         BodyDef bDef = new BodyDef();
-        bDef.position.set(x / PangGame.PPM);
+        System.out.println("converted y " + y / PangGame.PPM);
+        System.out.println("height " + getHeight());
+
+        bDef.position.set(x / PangGame.PPM, y / PangGame.PPM);
+        //bDef.position.set(PangGame.V_WIDTH / 2 / PangGame.PPM, PangGame.V_HEIGHT / 2 / PangGame.PPM);
         bDef.type = BodyDef.BodyType.KinematicBody;
         b2Body = world.createBody(bDef);
 
@@ -51,7 +60,7 @@ public class Player extends Sprite {
 
         shape.set(vertice);
 
-        fixtureDef.filter.categoryBits = PangGame.PLAYER_BIT;
+        //fixtureDef.filter.categoryBits = PangGame.PLAYER_BIT;
 
         fixtureDef.shape = shape;
 
