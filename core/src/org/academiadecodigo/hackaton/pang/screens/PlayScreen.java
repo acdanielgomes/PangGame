@@ -60,61 +60,63 @@ public class PlayScreen implements Screen {
         balls.add(new Ball(this));
 
         renderer = new Box2DDebugRenderer();
-//        player1 = new Player(this, 0, POS_PLAYER1);
-//        player2 = new Player(this, 0, POS_PLAYER2);
+        player1 = new Player(this, POS_PLAYER1, 200);
+        player2 = new Player(this, POS_PLAYER2, 200);
 
     }
 
-//    private void handleInput(float dt) {
-//        handlePlayer1Input();
-//        handlePlayer2Input();
-//    }
-//
-//    private void handlePlayer1Input() {
-//        if (Gdx.input.isKeyPressed(Input.Keys.Z)) {
-//            player1.getBody().setLinearVelocity(-PangGame.PLAYER_SPEED, 0);
-//        } else if (Gdx.input.isKeyPressed(Input.Keys.X)) {
-//            player1.getBody().setLinearVelocity(PangGame.PLAYER_SPEED, 0);
-//        } else {
-//            Vector2 p1Vel = player1.getBody().getLinearVelocity();
-//            if (p1Vel.x != 0 || p1Vel.y != 0) {
-//                setToSteady(player1);
-//            }
-//        }
-//        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-//            player1.shoot();
-//        }
-//    }
+    private void handleInput(float dt) {
+        handlePlayer1Input();
+        handlePlayer2Input();
+    }
 
-//    private void handlePlayer2Input() {
-//        if (Gdx.input.isKeyPressed(Input.Keys.M)) {
-//            player2.getBody().setLinearVelocity(-PangGame.PLAYER_SPEED, 0);
-//        } else if (Gdx.input.isKeyPressed(Input.Keys.COMMA)) {
-//            player2.getBody().setLinearVelocity(PangGame.PLAYER_SPEED, 0);
-//        } else {
-//            Vector2 p2Vel = player2.getBody().getLinearVelocity();
-//            if (p2Vel.x != 0 || p2Vel.y != 0) {
-//                setToSteady(player2);
-//            }
-//        }
-//        if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) {
-//            player2.shoot();
-//        }
-//    }
-//
-//    private void setToSteady(Player player) {
-//        player.getBody().setLinearVelocity(0, 0);
-//    }
+    private void handlePlayer1Input() {
+        if (Gdx.input.isKeyPressed(Input.Keys.Z)) {
+            player1.getBody().setLinearVelocity(-PangGame.PLAYER_SPEED, 0);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.X)) {
+            player1.getBody().setLinearVelocity(PangGame.PLAYER_SPEED, 0);
+        } else {
+            Vector2 p1Vel = player1.getBody().getLinearVelocity();
+            if (p1Vel.x != 0 || p1Vel.y != 0) {
+                setToSteady(player1);
+            }
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) {
+            //player1.shoot();
+            System.out.println("shoot");
+        }
+    }
+
+    private void handlePlayer2Input() {
+        if (Gdx.input.isKeyPressed(Input.Keys.M)) {
+            player2.getBody().setLinearVelocity(-PangGame.PLAYER_SPEED, 0);
+        } else if (Gdx.input.isKeyPressed(Input.Keys.COMMA)) {
+           player2.getBody().setLinearVelocity(PangGame.PLAYER_SPEED, 0);
+        } else {
+            Vector2 p2Vel = player2.getBody().getLinearVelocity();
+            if (p2Vel.x != 0 || p2Vel.y != 0) {
+               setToSteady(player2);
+           }
+       }
+       if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+           //player2.shoot();
+           System.out.println("shoot pl2");
+       }
+   }
+
+    private void setToSteady(Player player) {
+        player.getBody().setLinearVelocity(0, 0);
+    }
 
     private void update(float dt) {
-//        handleInput(dt);
+        handleInput(dt);
         world.step(1 / 60f,6, 2);
 
         for (Ball ball : balls) {
             ball.update(dt);
         }
-//        player1.update(dt);
-//        player2.update(dt);
+        player1.update(dt);
+        player2.update(dt);
 
         cam.update();
     }
@@ -136,7 +138,10 @@ public class PlayScreen implements Screen {
         game.getBatch().setProjectionMatrix(cam.combined);
         game.getBatch().begin();
 
-        balls.get(0).draw(game.getBatch());
+        //balls.get(0).draw(game.getBatch());
+        player1.draw(game.getBatch());
+        player2.draw(game.getBatch());
+        //System.out.println("Pos " + player1.getWidth() + " " + player1.getHeight() + " " + player1.getX() + " " + player1.getY());
 
         game.getBatch().end();
     }
