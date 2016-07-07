@@ -41,8 +41,6 @@ public class Player extends Sprite {
     public void definePlayer(float x, float y) {
 
         BodyDef bDef = new BodyDef();
-        System.out.println("converted y " + y / PangGame.PPM);
-        System.out.println("height " + getHeight());
 
         bDef.position.set(x / PangGame.PPM, y / PangGame.PPM);
         //bDef.position.set(PangGame.V_WIDTH / 2 / PangGame.PPM, PangGame.V_HEIGHT / 2 / PangGame.PPM);
@@ -53,10 +51,10 @@ public class Player extends Sprite {
         FixtureDef fixtureDef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
         Vector2[] vertice = new Vector2[4];
-        vertice[0] = new Vector2(-PangGame.PLAYER_WIDTH, PangGame.PLAYER_HEIGHT).scl(1 / PangGame.PPM);
-        vertice[1] = new Vector2(-PangGame.PLAYER_WIDTH, -PangGame.PLAYER_HEIGHT).scl(1 / PangGame.PPM);
-        vertice[2] = new Vector2(PangGame.PLAYER_WIDTH, -PangGame.PLAYER_HEIGHT).scl(1 / PangGame.PPM);
-        vertice[3] = new Vector2(PangGame.PLAYER_WIDTH, PangGame.PLAYER_HEIGHT).scl(1 / PangGame.PPM);
+        vertice[0] = new Vector2(-PangGame.PLAYER_WIDTH / 2, PangGame.PLAYER_HEIGHT / 2).scl(1 / PangGame.PPM);
+        vertice[1] = new Vector2(-PangGame.PLAYER_WIDTH / 2, -PangGame.PLAYER_HEIGHT / 2).scl(1 / PangGame.PPM);
+        vertice[2] = new Vector2(PangGame.PLAYER_WIDTH / 2, -PangGame.PLAYER_HEIGHT / 2).scl(1 / PangGame.PPM);
+        vertice[3] = new Vector2(PangGame.PLAYER_WIDTH / 2, PangGame.PLAYER_HEIGHT / 2).scl(1 / PangGame.PPM);
 
         shape.set(vertice);
 
