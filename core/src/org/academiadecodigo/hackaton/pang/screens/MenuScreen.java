@@ -51,7 +51,7 @@ public class MenuScreen implements Screen {
 
         if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
 
-            game.setScreen(new PlayScreen(PangGame game, AssetManager manager));
+            game.setScreen(new PlayScreen(game, manager));
             dispose();
         }
     }
