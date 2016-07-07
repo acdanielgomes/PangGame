@@ -66,10 +66,10 @@ public class MenuScreen implements Screen {
 
         update(delta);
 
-        game.batch.setProjectionMatrix(cam.combined);
-        game.batch.begin();
-        game.batch.draw(texture, 0, cam.position.y - cam.viewportHeight / 2);
-        game.batch.end();
+        game.getBatch().setProjectionMatrix(cam.combined);
+        game.getBatch().begin();
+        game.getBatch().draw(texture, 0, cam.position.y - cam.viewportHeight / 2);
+        game.getBatch().end();
 
     }
 
