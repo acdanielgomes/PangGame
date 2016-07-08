@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import org.academiadecodigo.hackaton.pang.PangGame;
 import org.academiadecodigo.hackaton.pang.screens.PlayScreen;
+import org.academiadecodigo.hackaton.pang.utilities.BoundaryType;
 
 /**
  * Created by codecadet on 07/07/16.
@@ -21,25 +22,23 @@ public class Boundary extends Sprite {
     // Describes properties(size, shape) of an object
     private Fixture fixture;
 
+    private BoundaryType boundaryType;
+
     /**
      * Constructor of a boundary
      * Set texture, size and
      * reference to the game world
      *
      * @param playScreen Game references
-     * @param posX
-     * @param posY
-     * @param height
-     * @param width
      */
-    public Boundary(PlayScreen playScreen, int posX, int posY, float width, float height) {
-        super(new Texture("BOUNDARY_URL"));
+    public Boundary(PlayScreen playScreen, BoundaryType boundaryType) {
+        super(new Texture("badLogic.jpg"));
+
+        this.boundaryType = boundaryType;
 
         world = playScreen.getWorld();
 
-        setSize(width, height);
-
-        defineBoundary(posX, posY);
+        defineBoundary();
     }
 
     /**
@@ -48,8 +47,8 @@ public class Boundary extends Sprite {
      * @param posX
      * @param posY
      */
-    private void defineBoundary(int posX, int posY) {
-        body = setBodyDef(posX, posY);
+    private void defineBoundary() {
+        body = setBodyDef();
         setFixtureDef();
     }
 
@@ -61,10 +60,13 @@ public class Boundary extends Sprite {
      * @param posY
      * @return
      */
-    private Body setBodyDef(int posX, int posY) {
+    private Body setBodyDef() {
         // Holds all the data needed to construct a rigid body
         BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set(posX / PangGame.PPM, posY / PangGame.PPM);
+
+        float[] position = definePosition(boundaryType);
+
+        bodyDef.position.set(position[0], position[1]);
 
         // Velocity determined by forces
         bodyDef.type = BodyDef.BodyType.StaticBody;
@@ -80,13 +82,7 @@ public class Boundary extends Sprite {
         FixtureDef fdef = new FixtureDef();
 
         PolygonShape shape = new PolygonShape();
-        shape.setRadius(PangGame.BALL_RADIUS / PangGame.PPM);
-        Vector2[] vertice = new Vector2[4];
-        vertice[0] = new Vector2(-PangGame.V_WIDTH / 2, 10).scl(1 / PangGame.PPM);
-        vertice[1] = new Vector2(-PangGame.V_WIDTH / 2, 0).scl(1 / PangGame.PPM);
-        vertice[2] = new Vector2(PangGame.V_WIDTH / 2, 10).scl(1 / PangGame.PPM);
-        vertice[3] = new Vector2(PangGame.V_WIDTH / 2, 0).scl(1 / PangGame.PPM);
-        shape.set(vertice);
+        shape.set(defineVertices(boundaryType));
 
         // For collision detection
 //        fdef.filter.categoryBits = PangGame.BOUNDARY_BIT;                                          // Define who is it
@@ -99,6 +95,62 @@ public class Boundary extends Sprite {
 
         fixture = body.createFixture(fdef);
         fixture.setUserData(this);
+    }
+
+    private float[] definePosition(BoundaryType boundaryType) {
+
+        float[] position = new float[2];
+
+        switch (boundaryType) {
+            case FLOOR:
+                position[0] = PangGame.V_WIDTH / 2 / PangGame.PPM;
+                position[1] = 0;
+                break;
+
+            case TOP:
+                position[0] = PangGame.V_WIDTH / 2 / PangGame.PPM;
+                position[1] = (PangGame.V_HEIGHT - PangGame.BOUNDARY_THICKNESS) / PangGame.PPM;
+                break;
+
+            case RIGHT_WALL:
+                position[0] = PangGame.V_WIDTH / PangGame.PPM;
+                position[1] = 0;
+                break;
+
+            case LEFT_WALL:
+                position[0] = 0;
+                position[1] = 0;
+                break;
+
+        }
+
+        return position;
+    }
+
+    private Vector2[] defineVertices(BoundaryType boundaryType) {
+
+        Vector2[] vertice = new Vector2[4];
+
+        switch (boundaryType) {
+            case FLOOR:
+            case TOP:
+                vertice[0] = new Vector2(-PangGame.V_WIDTH / 2, PangGame.BOUNDARY_THICKNESS).scl(1 / PangGame.PPM);
+                vertice[1] = new Vector2(-PangGame.V_WIDTH / 2, 0).scl(1 / PangGame.PPM);
+                vertice[2] = new Vector2(PangGame.V_WIDTH / 2, PangGame.BOUNDARY_THICKNESS).scl(1 / PangGame.PPM);
+                vertice[3] = new Vector2(PangGame.V_WIDTH / 2, 0).scl(1 / PangGame.PPM);
+                break;
+
+            case RIGHT_WALL:
+            case LEFT_WALL:
+                vertice[0] = new Vector2(-PangGame.BOUNDARY_THICKNESS, PangGame.V_HEIGHT).scl(1 / PangGame.PPM);
+                vertice[1] = new Vector2(-PangGame.BOUNDARY_THICKNESS, 0).scl(1 / PangGame.PPM);
+                vertice[2] = new Vector2(PangGame.BOUNDARY_THICKNESS, PangGame.V_HEIGHT).scl(1 / PangGame.PPM);
+                vertice[3] = new Vector2(PangGame.BOUNDARY_THICKNESS, 0).scl(1 / PangGame.PPM);
+                break;
+
+        }
+
+        return vertice;
     }
 
     /**

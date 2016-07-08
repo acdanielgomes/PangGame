@@ -7,6 +7,8 @@ import com.badlogic.gdx.physics.box2d.*;
 import org.academiadecodigo.hackaton.pang.PangGame;
 import org.academiadecodigo.hackaton.pang.screens.PlayScreen;
 
+import java.util.List;
+
 /**
  * Created by codecadet on 07/07/16.
  */
@@ -16,6 +18,9 @@ public class Player extends Sprite {
     public World world;
 
     /* Receive impulses and forces */
+
+    private PlayScreen playScreen;
+
     private Body b2Body;
 
     /* Describes properties (size and shape) of an object */
@@ -31,7 +36,9 @@ public class Player extends Sprite {
      */
     public Player(PlayScreen screen, float x, float y) {
 
-        super(new Texture("badlogic.jpg")); // TODO: 07/07/16 player image
+        super(new Texture("Player1/P1animationLeft/P1MoveL1.png")); // TODO: 07/07/16 player image
+
+        playScreen = screen;
         this.world = screen.getWorld();
         this.setSize(PangGame.PLAYER_WIDTH / PangGame.PPM, PangGame.PLAYER_HEIGHT / PangGame.PPM);
 
@@ -44,7 +51,6 @@ public class Player extends Sprite {
      * @param dt Time since the last update
      */
     public void update(float dt) {
-
         setPosition(b2Body.getPosition().x - getWidth() / 2, b2Body.getPosition().y - getHeight() / 2);
     }
 
@@ -101,4 +107,7 @@ public class Player extends Sprite {
         return b2Body;
     }
 
+    public Harpoon shoot() {
+        return new Harpoon(playScreen, getX());
+    }
 }

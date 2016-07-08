@@ -7,6 +7,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -16,7 +17,13 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import org.academiadecodigo.hackaton.pang.PangGame;
 import org.academiadecodigo.hackaton.pang.collision.CollisionDetector;
 import org.academiadecodigo.hackaton.pang.sprites.Ball;
+import org.academiadecodigo.hackaton.pang.sprites.Boundary;
+import org.academiadecodigo.hackaton.pang.sprites.Harpoon;
 import org.academiadecodigo.hackaton.pang.sprites.Player;
+import org.academiadecodigo.hackaton.pang.utilities.BoundaryType;
+
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * Created by codecadet on 07/07/16.
@@ -39,6 +46,14 @@ public class PlayScreen implements Screen {
     private Player player1;
     private Player player2;
 
+    private Boundary floor;
+    private Boundary top;
+    private Boundary right;
+    private Boundary left;
+    private List<Harpoon> harpoons;
+
+    private final Texture background = new Texture("background.png");
+
     public PlayScreen(PangGame game, AssetManager manager) {
         this.game = game;
         this.manager = manager;
@@ -48,7 +63,7 @@ public class PlayScreen implements Screen {
 
     private void init() {
         cam = new OrthographicCamera();
-        cam.setToOrtho(false, PangGame.V_WIDTH / 2 / PangGame.PPM, PangGame.V_HEIGHT / 2 / PangGame.PPM);
+        cam.setToOrtho(false, PangGame.V_WIDTH  / PangGame.PPM, PangGame.V_HEIGHT/ PangGame.PPM);
 
         port = new FitViewport(PangGame.V_WIDTH / PangGame.PPM, PangGame.V_HEIGHT / PangGame.PPM, cam);
         cam.position.set(port.getWorldWidth() / 2, port.getWorldHeight() / 2, 0);
@@ -56,12 +71,24 @@ public class PlayScreen implements Screen {
         world = new World(new Vector2(0f, -9.8f), true);
         world.setContactListener(new CollisionDetector());
 
+        floor = new Boundary(this, BoundaryType.FLOOR);
+        top = new Boundary(this, BoundaryType.TOP);
+        right = new Boundary(this, BoundaryType.RIGHT_WALL);
+        left = new Boundary(this, BoundaryType.LEFT_WALL);
+
         balls = new Array<Ball>();
-        balls.add(new Ball(this));
+        balls.add(new Ball(this, null));
+        balls.add(new Ball(this, balls.get(0)));
+        balls.add(new Ball(this, balls.get(1)));
+        balls.add(new Ball(this, balls.get(2)));
 
         renderer = new Box2DDebugRenderer();
-        player1 = new Player(this, POS_PLAYER1, 200);
-        player2 = new Player(this, POS_PLAYER2, 200);
+
+        float playerPosY = PangGame.BOUNDARY_THICKNESS + PangGame.PLAYER_HEIGHT / 2;
+
+        player1 = new Player(this, POS_PLAYER1, playerPosY);
+        player2 = new Player(this, POS_PLAYER2, playerPosY);
+        harpoons = new LinkedList<Harpoon>();
 
     }
 
@@ -82,8 +109,7 @@ public class PlayScreen implements Screen {
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) {
-            //player1.shoot();
-            System.out.println("shoot");
+            harpoons.add(player1.shoot());
         }
     }
 
@@ -99,8 +125,7 @@ public class PlayScreen implements Screen {
            }
        }
        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-           //player2.shoot();
-           System.out.println("shoot pl2");
+           harpoons.add(player2.shoot());
        }
    }
 
@@ -111,6 +136,10 @@ public class PlayScreen implements Screen {
     private void update(float dt) {
         handleInput(dt);
         world.step(1 / 60f,6, 2);
+
+        for (Harpoon harpoon : harpoons) {
+            harpoon.update();
+        }
 
         for (Ball ball : balls) {
             ball.update(dt);
@@ -133,17 +162,30 @@ public class PlayScreen implements Screen {
 
         update(delta);
 
-        renderer.render(world, cam.combined);
-
         game.getBatch().setProjectionMatrix(cam.combined);
         game.getBatch().begin();
 
-        //balls.get(0).draw(game.getBatch());
+        game.getBatch().draw(background, 0, 0, PangGame.V_WIDTH / PangGame.PPM, PangGame.V_HEIGHT / PangGame.PPM);
+
+        for (Ball ball : balls) {
+            ball.draw(game.getBatch());
+        }
+
+        for (Harpoon harpoon : harpoons) {
+            harpoon.draw(game.getBatch());
+        }
+
         player1.draw(game.getBatch());
         player2.draw(game.getBatch());
         //System.out.println("Pos " + player1.getWidth() + " " + player1.getHeight() + " " + player1.getX() + " " + player1.getY());
 
         game.getBatch().end();
+
+        renderer.render(world, cam.combined);
+    }
+
+    public Array<Ball> getBalls() {
+        return balls;
     }
 
     public World getWorld() {
