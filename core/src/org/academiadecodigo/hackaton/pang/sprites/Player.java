@@ -87,7 +87,7 @@ public class Player extends Sprite {
 
         shape.set(vertice);
 
-        //fixtureDef.filter.categoryBits = PangGame.PLAYER_BIT;
+        fixtureDef.filter.categoryBits = PangGame.PLAYER_BIT;
 
         fixtureDef.shape = shape;
 
@@ -119,5 +119,8 @@ public class Player extends Sprite {
     public Harpoon shoot() {
         shot = true;
         return new Harpoon(playScreen, getX());
+    }
+
+    public void onHit(){
     }
 }
