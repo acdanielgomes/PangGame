@@ -8,6 +8,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import org.academiadecodigo.hackaton.pang.PangGame;
@@ -25,6 +26,7 @@ public class MenuScreen implements Screen {
     private Music music;
 
     private Texture texture;
+    private Texture text;
 
 
     public MenuScreen(PangGame game, AssetManager manager) {
@@ -41,7 +43,8 @@ public class MenuScreen implements Screen {
         //music.setLooping(true);
         //music.play();
 
-        //texture = new Texture("menuBackground.png");
+        texture = new Texture("intro.png");
+        text = new Texture("start.png");
     }
 
     public void update(float delta) {
@@ -50,7 +53,7 @@ public class MenuScreen implements Screen {
 
     public void keyHandler(float delta) {
 
-        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ANY_KEY)) {
 
             game.setScreen(new PlayScreen(game, manager));
             dispose();
@@ -71,7 +74,8 @@ public class MenuScreen implements Screen {
 
         game.getBatch().setProjectionMatrix(cam.combined);
         game.getBatch().begin();
-        //game.getBatch().draw(texture, 0, cam.position.y - cam.viewportHeight / 2);
+        game.getBatch().draw(texture, 0, cam.position.y - cam.viewportHeight / 2, PangGame.V_WIDTH, PangGame.V_HEIGHT);
+        game.getBatch().draw(text, cam.position.x - text.getWidth() / 2, cam.position.y - 225);
         game.getBatch().end();
 
     }

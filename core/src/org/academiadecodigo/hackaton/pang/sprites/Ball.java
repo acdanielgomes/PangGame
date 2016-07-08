@@ -73,6 +73,10 @@ public class Ball extends Sprite {
         body = setBodyDef();
         body.applyLinearImpulse(new Vector2(PangGame.BALL_SPEED * dir, 0), body.getWorldCenter(), true);
 
+        if (previousBall != null){
+            body.applyLinearImpulse(new Vector2(0, PangGame.SMALL_BALLS_VERTICAL_IMPULSE), body.getWorldCenter(), true);
+        }
+
         setFixtureDef();
     }
 
@@ -87,7 +91,7 @@ public class Ball extends Sprite {
         BodyDef bodyDef = new BodyDef();
 
         if (previousBall == null) {
-            bodyDef.position.set(PangGame.V_WIDTH / 2 / PangGame.PPM, PangGame.V_HEIGHT / 2 / PangGame.PPM);
+            bodyDef.position.set(PangGame.V_WIDTH / 2 / PangGame.PPM, PangGame.BALL_SPAWN_HEIGHT / PangGame.PPM);
         } else {
             bodyDef.position.set(previousBall.getX(), previousBall.getY());
         }

@@ -20,7 +20,6 @@ import org.academiadecodigo.hackaton.pang.sprites.Ball;
 import org.academiadecodigo.hackaton.pang.sprites.Boundary;
 import org.academiadecodigo.hackaton.pang.sprites.Harpoon;
 import org.academiadecodigo.hackaton.pang.sprites.Player;
-import org.academiadecodigo.hackaton.pang.utilities.AnimationManager;
 import org.academiadecodigo.hackaton.pang.utilities.BoundaryType;
 
 import java.util.Iterator;
@@ -54,7 +53,6 @@ public class PlayScreen implements Screen {
     private Boundary left;
     private List<Harpoon> harpoons;
 
-    private AnimationManager animationManager = new AnimationManager();
 
     private long lastSpawn;
 
@@ -94,6 +92,7 @@ public class PlayScreen implements Screen {
         player2 = new Player(this, POS_PLAYER2, playerPosY, 2);
         harpoons = new LinkedList<Harpoon>();
 
+        //animationManager.load(1, "L", 1);
     }
 
     private void handleInput(float dt) {
@@ -102,12 +101,10 @@ public class PlayScreen implements Screen {
     }
 
     private void handlePlayer1Input() {
-        if (Gdx.input.isKeyPressed(Input.Keys.Z)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.Z) && player1.getBody().getPosition().x - (PangGame.PLAYER_WIDTH / 2 / PangGame.PPM) - (PangGame.BOUNDARY_THICKNESS / PangGame.PPM) > 0) {
             player1.getBody().setLinearVelocity(-PangGame.PLAYER_SPEED, 0);
-            animationManager.load(1, "L", 1);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.X)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.X) && player1.getBody().getPosition().x + (PangGame.PLAYER_WIDTH / 2 / PangGame.PPM) + (PangGame.BOUNDARY_THICKNESS / PangGame.PPM) < PangGame.V_WIDTH / PangGame.PPM) {
             player1.getBody().setLinearVelocity(PangGame.PLAYER_SPEED, 0);
-            animationManager.load(1, "R", 2);
         } else {
             Vector2 p1Vel = player1.getBody().getLinearVelocity();
             if (p1Vel.x != 0 || p1Vel.y != 0) {
@@ -121,9 +118,9 @@ public class PlayScreen implements Screen {
     }
 
     private void handlePlayer2Input() {
-        if (Gdx.input.isKeyPressed(Input.Keys.M)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.M) && player2.getBody().getPosition().x - (PangGame.PLAYER_WIDTH / 2 / PangGame.PPM) - (PangGame.BOUNDARY_THICKNESS / PangGame.PPM) > 0) {
             player2.getBody().setLinearVelocity(-PangGame.PLAYER_SPEED, 0);
-        } else if (Gdx.input.isKeyPressed(Input.Keys.COMMA)) {
+        } else if (Gdx.input.isKeyPressed(Input.Keys.COMMA) && player2.getBody().getPosition().x + (PangGame.PLAYER_WIDTH / 2 / PangGame.PPM) + (PangGame.BOUNDARY_THICKNESS / PangGame.PPM) < PangGame.V_WIDTH / PangGame.PPM) {
            player2.getBody().setLinearVelocity(PangGame.PLAYER_SPEED, 0);
         } else {
             Vector2 p2Vel = player2.getBody().getLinearVelocity();
@@ -222,6 +219,8 @@ public class PlayScreen implements Screen {
         for (Harpoon harpoon : harpoons) {
             harpoon.draw(game.getBatch());
         }
+
+        //game.getBatch().draw(animationManager.getAnimation().getKeyFrame(delta, true), player1.getX(), player1.getY(), player1.getWidth(), player1.getHeight());
 
         player1.draw(game.getBatch());
         player2.draw(game.getBatch());

@@ -25,6 +25,7 @@ public class GameOverScreen implements Screen {
     private Music music;
 
     private Texture texture;
+    private Texture text;
 
     public GameOverScreen(PangGame game, AssetManager manager, int victoPlayer) {
         this.game = game;
@@ -39,11 +40,9 @@ public class GameOverScreen implements Screen {
         //music.setLooping(true);
         //music.play();
 
-        if (victoPlayer == 1) {
-            texture = new Texture("Background/Background32.png");
-        } else {
-            texture = new Texture("Background/Background31.png");
-        }
+        texture = new Texture("WinLoose/P" + victoPlayer + "Wins.png");
+        text = new Texture("WinLoose/P" + victoPlayer + "WinsLettering.png");
+
     }
 
     public void update(float delta) {
@@ -74,6 +73,7 @@ public class GameOverScreen implements Screen {
         game.getBatch().setProjectionMatrix(cam.combined);
         game.getBatch().begin();
         game.getBatch().draw(texture, 0, cam.position.y - cam.viewportHeight / 2, PangGame.V_WIDTH, PangGame.V_HEIGHT);
+        game.getBatch().draw(text, cam.position.x - text.getWidth() / 2, cam.position.y - 270);
         game.getBatch().end();
     }
 
