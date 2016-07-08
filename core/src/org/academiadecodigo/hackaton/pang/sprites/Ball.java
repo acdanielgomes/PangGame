@@ -97,8 +97,8 @@ public class Ball extends Sprite {
         shape.setRadius(PangGame.BALL_RADIUS / PangGame.PPM / sizeBall);
 
         // For collision detection
-//        fdef.filter.categoryBits = PangGame.BALL_BIT;                                           // Define who is it
-//        fdef.filter.maskBits = PangGame.BLOCK_BIT | PangGame.EDGE_BIT | PangGame.PADDLE_BIT;    // Define with whom can collide
+        fdef.filter.categoryBits = PangGame.BALL_BIT;                                           // Define who is it
+        fdef.filter.maskBits = PangGame.BOUNDARY_BIT | PangGame.PLAYER_BIT | PangGame.HARPOON_BIT;    // Define with whom can collide
 
         // Define material properties
         fdef.shape = shape;
@@ -121,4 +121,8 @@ public class Ball extends Sprite {
     public Body getBody() {
         return body;
     }
+    public void destroy(){
+    }
 }
+
+

@@ -85,7 +85,7 @@ public class Boundary extends Sprite {
         shape.set(defineVertices(boundaryType));
 
         // For collision detection
-//        fdef.filter.categoryBits = PangGame.BOUNDARY_BIT;                                          // Define who is it
+        fdef.filter.categoryBits = PangGame.BOUNDARY_BIT;                                          // Define who is it
 //        fdef.filter.maskBits = PangGame.BLOCK_BIT | PangGame.EDGE_BIT | PangGame.PADDLE_BIT;    // Define with whom can collide
 
         // Define material properties

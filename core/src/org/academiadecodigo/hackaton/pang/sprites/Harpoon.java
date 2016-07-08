@@ -37,6 +37,8 @@ public class Harpoon extends Sprite {
         fixtureDef.shape = shape;
         fixtureDef.density = 1f;
 
+        fixtureDef.filter.categoryBits = PangGame.HARPOON_BIT;
+
         fixture = body.createFixture(fixtureDef);
 
         move();
