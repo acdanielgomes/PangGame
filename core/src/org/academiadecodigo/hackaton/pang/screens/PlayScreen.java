@@ -31,7 +31,7 @@ import java.util.List;
  */
 public class PlayScreen implements Screen {
 
-    private final Texture background = new Texture("Background/background" + MathUtils.random(1, 32) + ".png");
+    private final Texture background = new Texture("Background" + MathUtils.random(1, 32) + ".png");
 
     private PangGame game;
     private AssetManager manager;
