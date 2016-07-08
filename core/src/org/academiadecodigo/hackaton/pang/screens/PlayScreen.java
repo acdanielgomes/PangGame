@@ -176,6 +176,10 @@ public class PlayScreen implements Screen {
         player1.update(dt);
         player2.update(dt);
 
+        if (player1.isDead() || player2.isDead()){
+            game.setScreen(new GameOverScreen(game, manager));
+            //dispose();
+        }
         cam.update();
     }
 
@@ -243,6 +247,9 @@ public class PlayScreen implements Screen {
 
     @Override
     public void dispose() {
+        background.dispose();
+        renderer.dispose();
+        world.dispose();
 
     }
 }

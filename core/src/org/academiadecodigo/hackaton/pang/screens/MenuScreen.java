@@ -36,11 +36,11 @@ public class MenuScreen implements Screen {
 
         cam.position.set(PangGame.V_WIDTH / 2, PangGame.V_HEIGHT / 2, 0);
 
-        music = manager.get("intro.mp3", Music.class);
-        music.setLooping(true);
-        music.play();
+        //music = manager.get("intro.mp3", Music.class);
+        //music.setLooping(true);
+        //music.play();
 
-        texture = new Texture("menuBackground.png");
+        //texture = new Texture("menuBackground.png");
     }
 
     public void update(float delta) {
@@ -68,7 +68,7 @@ public class MenuScreen implements Screen {
 
         game.getBatch().setProjectionMatrix(cam.combined);
         game.getBatch().begin();
-        game.getBatch().draw(texture, 0, cam.position.y - cam.viewportHeight / 2);
+        //game.getBatch().draw(texture, 0, cam.position.y - cam.viewportHeight / 2);
         game.getBatch().end();
 
     }
@@ -95,7 +95,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void dispose() {
-        texture.dispose();
-        music.dispose();
+        //texture.dispose();
+        //music.dispose();
     }
 }
