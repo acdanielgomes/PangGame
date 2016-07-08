@@ -10,27 +10,23 @@ import com.badlogic.gdx.utils.Array;
 import org.academiadecodigo.hackaton.pang.PangGame;
 import org.academiadecodigo.hackaton.pang.screens.PlayScreen;
 
-import java.util.List;
-
 /**
  * Created by codecadet on 07/07/16.
  */
 public class Player extends Sprite {
 
-    public enum State {
+    // Players states
+    private enum State {
         STANDING,
         RUNNING,
         SHOOTING
     }
 
-    public State currentState;
-    public State previousState;
-
-    private boolean isShooting;
-
+    private State currentState;
+    private State previousState;
 
     /* Manages all physics GameObjects */
-    public World world;
+    private World world;
 
     /* Receive impulses and forces */
     private PlayScreen playScreen;
@@ -39,7 +35,7 @@ public class Player extends Sprite {
     private Body b2Body;
 
     /* Describes properties (size and shape) of an object */
-    public Fixture fixture;
+    private Fixture fixture;
 
     private boolean isDead;
     private boolean shot;
@@ -49,10 +45,13 @@ public class Player extends Sprite {
     private Animation playerRun;
 
     private boolean runningRight;
+    private boolean isShooting;
+
+    /*
+     * To find the right key frame within an Animation, we tell how long we have been in this "state".
+     * It does some math to figure out which key frame to show
+     */
     private float stateTimer;
-    private Texture leftAnimTexture;
-    private Texture playerStandTexture;
-    private Texture playerShootingTexture;
 
     /**
      * Constructor of the Player
@@ -63,10 +62,6 @@ public class Player extends Sprite {
      * @param y      Position Y axis
      */
     public Player(PlayScreen screen, float x, float y, int playerNumber) {
-
-        //super(new Texture("Player" + playerNumber + "/P" + playerNumber + "Still.png"));
-        //leftAnimTexture = new Texture("Player" + playerNumber + "/P" + playerNumber + "R.png");
-
         playScreen = screen;
         this.world = screen.getWorld();
         this.setSize(PangGame.PLAYER_WIDTH / PangGame.PPM, PangGame.PLAYER_HEIGHT / PangGame.PPM);
@@ -90,24 +85,31 @@ public class Player extends Sprite {
         playerShoot = new Animation(0.1f, shootFrames);
 
         playerStand = new TextureRegion(new Texture("Player/P" + playerNumber + "Still.png"));
+
         definePlayer(x, y);
     }
 
     /**
-     * Update properties of the Player
+     * Update the position according to body position
+     * and sets the texture to be shown
      *
      * @param dt Time since the last update
      */
     public void update(float dt) {
-
         setPosition(b2Body.getPosition().x - getWidth() / 2, b2Body.getPosition().y - getHeight() / 2);
         setRegion(getFrame(dt));
     }
 
+    /**
+     * Change the texture to be drawn
+     *
+     * @param dt Time since the last update
+     * @return The new texture region
+     */
     public TextureRegion getFrame(float dt) {
-        currentState = getState();
-
         TextureRegion region;
+
+        currentState = getState();
 
         switch (currentState) {
             case RUNNING:
@@ -122,6 +124,7 @@ public class Player extends Sprite {
                 break;
         }
 
+        // Changes the player texture direction to where he is going
         if ((b2Body.getLinearVelocity().x < 0 || !runningRight) && !region.isFlipX()) {
             region.flip(true, false);
             runningRight = false;
@@ -132,10 +135,15 @@ public class Player extends Sprite {
 
         stateTimer = currentState == previousState ? stateTimer + dt : 0;
         previousState = currentState;
+
         return region;
     }
 
-
+    /**
+     * Getter
+     *
+     * @return
+     */
     public State getState() {
         if (b2Body.getLinearVelocity().x != 0) {
             isShooting = false;
@@ -162,14 +170,13 @@ public class Player extends Sprite {
      */
     public void definePlayer(float x, float y) {
 
+        // Define the body definitions
         BodyDef bDef = new BodyDef();
-
         bDef.position.set(x / PangGame.PPM, y / PangGame.PPM);
-        //bDef.position.set(PangGame.V_WIDTH / 2 / PangGame.PPM, PangGame.V_HEIGHT / 2 / PangGame.PPM);
         bDef.type = BodyDef.BodyType.KinematicBody;
         b2Body = world.createBody(bDef);
 
-
+        // Sets the fixture(size, shape)
         FixtureDef fixtureDef = new FixtureDef();
         PolygonShape shape = new PolygonShape();
         Vector2[] vertice = new Vector2[4];
@@ -181,19 +188,33 @@ public class Player extends Sprite {
         shape.set(vertice);
 
         fixtureDef.filter.categoryBits = PangGame.PLAYER_BIT;
-
         fixtureDef.shape = shape;
-
-        // TODO: 07/07/16 check values
-        fixtureDef.restitution = 0f;
+        fixtureDef.restitution = 0f; // Bounciness
         fixtureDef.friction = 0f;
+
         fixture = b2Body.createFixture(fixtureDef);
         fixture.setUserData(this);
 
     }
 
-    public void onHit() {
-        isDead = true;
+    /**
+     * Create a new harpoon when the player press shoot
+     *
+     * @return
+     */
+    public Harpoon shoot() {
+        shot = true;
+        isShooting = true;
+        return new Harpoon(playScreen, getX(), this);
+    }
+
+    /**
+     * Getter
+     *
+     * @return
+     */
+    public boolean getShot() {
+        return shot;
     }
 
     /**
@@ -214,17 +235,18 @@ public class Player extends Sprite {
         return b2Body;
     }
 
+    /**
+     * Setter
+     */
+    public void onHit() {
+        isDead = true;
+    }
+
+    /**
+     * Setter
+     */
     public void shot() {
         shot = false;
     }
 
-    public boolean getShot() {
-        return shot;
-    }
-
-    public Harpoon shoot() {
-        shot = true;
-        isShooting = true;
-        return new Harpoon(playScreen, getX(), this);
-    }
 }

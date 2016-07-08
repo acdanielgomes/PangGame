@@ -11,8 +11,10 @@ import org.academiadecodigo.hackaton.pang.sprites.Player;
  */
 public class CollisionDetector implements ContactListener {
     @Override
+    /**
+     * @see ContactListener#beginContact(Contact)
+     */
     public void beginContact(Contact contact) {
-
         Fixture fixA = contact.getFixtureA();
         Fixture fixB = contact.getFixtureB();
 
@@ -40,16 +42,25 @@ public class CollisionDetector implements ContactListener {
     }
 
     @Override
+    /**
+     * @see ContactListener#endContact(Contact)
+     */
     public void endContact(Contact contact) {
 
     }
 
     @Override
+    /**
+     * @see ContactListener#preSolve(Contact, Manifold)
+     */
     public void preSolve(Contact contact, Manifold oldManifold) {
 
     }
 
     @Override
+    /**
+     * @see ContactListener#postSolve(Contact, ContactImpulse)
+     */
     public void postSolve(Contact contact, ContactImpulse impulse) {
 
     }

@@ -2,7 +2,6 @@ package org.academiadecodigo.hackaton.pang.sprites;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import org.academiadecodigo.hackaton.pang.PangGame;
@@ -28,6 +27,7 @@ public class Ball extends Sprite {
     private int sizeBall;
 
     private boolean isDestroy;
+
     private float dir;
 
     /**
@@ -36,6 +36,8 @@ public class Ball extends Sprite {
      * and reference to the game world
      *
      * @param playScreen Game references
+     * @param previousBall Parent ball
+     * @param dir Direction of the ball in the X axis
      */
     public Ball(PlayScreen playScreen, Ball previousBall, float dir) {
         super(new Texture("Balloons/LStar.png"));
@@ -58,11 +60,9 @@ public class Ball extends Sprite {
     }
 
     /**
-     * Update properties of the ball
-     *
-     * @param delta Time since the last update
+     * Update the position according to body position
      */
-    public void update(float delta) {
+    public void update() {
         setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
     }
 
@@ -118,7 +118,7 @@ public class Ball extends Sprite {
 
         // Define material properties
         fdef.shape = shape;
-        fdef.restitution = 1f;          // Bounciness of the ball
+        fdef.restitution = 1f; // Bounciness
         fdef.friction = 0f;
 
         fixture = body.createFixture(fdef);

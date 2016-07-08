@@ -1,6 +1,5 @@
 package org.academiadecodigo.hackaton.pang.sprites;
 
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -30,10 +29,9 @@ public class Boundary extends Sprite {
      * reference to the game world
      *
      * @param playScreen Game references
+     * @param boundaryType Boundary type
      */
     public Boundary(PlayScreen playScreen, BoundaryType boundaryType) {
-        super(new Texture("badLogic.jpg"));
-
         this.boundaryType = boundaryType;
 
         world = playScreen.getWorld();
@@ -43,9 +41,6 @@ public class Boundary extends Sprite {
 
     /**
      * Define the boundary characteristics
-     *
-     * @param posX
-     * @param posY
      */
     private void defineBoundary() {
         body = setBodyDef();
@@ -56,8 +51,6 @@ public class Boundary extends Sprite {
      * Creates a body with a set of definitions
      * Sets the position and the body type
      *
-     * @param posX
-     * @param posY
      * @return
      */
     private Body setBodyDef() {
@@ -65,7 +58,6 @@ public class Boundary extends Sprite {
         BodyDef bodyDef = new BodyDef();
 
         float[] position = definePosition(boundaryType);
-
         bodyDef.position.set(position[0], position[1]);
 
         // Velocity determined by forces
@@ -87,20 +79,23 @@ public class Boundary extends Sprite {
         // For collision detection
         fdef.filter.categoryBits = PangGame.BOUNDARY_BIT;
 
-        // Define who is it
-        //fdef.filter.maskBits = PangGame.BALL_BIT | PangGame.HARPOON_BIT;    // Define with whom can collide
-
         // Define material properties
         fdef.shape = shape;
-        fdef.restitution = 0f;          // Bounciness of the material
+        fdef.restitution = 0f;          // Bounciness
         fdef.friction = 0f;
 
         fixture = body.createFixture(fdef);
         fixture.setUserData(this);
     }
 
+    /**
+     * Sets the position of the boundary
+     * according to his type
+     *
+     * @param boundaryType The boundary type
+     * @return Array with the position of the boundary
+     */
     private float[] definePosition(BoundaryType boundaryType) {
-
         float[] position = new float[2];
 
         switch (boundaryType) {
@@ -129,8 +124,13 @@ public class Boundary extends Sprite {
         return position;
     }
 
+    /**
+     * Define the polygon shape
+     *
+     * @param boundaryType The boundary type
+     * @return vertices of the boundary
+     */
     private Vector2[] defineVertices(BoundaryType boundaryType) {
-
         Vector2[] vertice = new Vector2[4];
 
         switch (boundaryType) {
@@ -153,14 +153,5 @@ public class Boundary extends Sprite {
         }
 
         return vertice;
-    }
-
-    /**
-     * Getter
-     *
-     * @return
-     */
-    public Body getBody() {
-        return body;
     }
 }

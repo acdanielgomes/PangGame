@@ -1,16 +1,13 @@
 package org.academiadecodigo.hackaton.pang;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import org.academiadecodigo.hackaton.pang.screens.MenuScreen;
-import org.academiadecodigo.hackaton.pang.screens.PlayScreen;
 
 public class PangGame extends Game {
     public static final int V_WIDTH = 1080;
@@ -19,6 +16,8 @@ public class PangGame extends Game {
     public static final float PLAYER_WIDTH = 60;
     public static final float PLAYER_HEIGHT = 75;
     public static final float PLAYER_SPEED = 3f;
+    public static final float POS_PLAYER1 = 300;
+    public static final float POS_PLAYER2 = 800;
     public static final float HARPOON_WIDTH = 20;
     public static final float HARPOON_HEIGHT = V_HEIGHT;
     public static final float HARPOON_SPEED = 4f;
@@ -34,35 +33,54 @@ public class PangGame extends Game {
     public static final short HARPOON_BIT = 8;
     public static final short BOUNDARY_BIT = 16;
 
-    public SpriteBatch getBatch() {
-        return batch;
-    }
-
+    // Draw textures
     private SpriteBatch batch;
+
+    // Responsible for playing sounds and music
     private AssetManager manager;
 
     @Override
+    /**
+     * @see Game#create()
+     */
     public void create() {
 
         batch = new SpriteBatch();
 
         manager = new AssetManager();
-        manager.load("gamesounds/game.wav", Music.class);
+        manager.load("gamesounds/SoundTrack.mp3", Music.class);
+        manager.load("gamesounds/BubblePop.mp3", Sound.class);
+        manager.load("gamesounds/GunClank.mp3", Sound.class);
         manager.finishLoading();
 
-        setScreen(new MenuScreen(this, manager));
 
+        setScreen(new MenuScreen(this, manager));
     }
 
     @Override
+    /**
+     * @see Game#render() ()
+     */
     public void render() {
         super.render();
     }
 
     @Override
+    /**
+     * @see Game#dispose()
+     */
     public void dispose() {
         super.dispose();
         batch.dispose();
         manager.dispose();
+    }
+
+    /**
+     * Getter
+     *
+     * @return
+     */
+    public SpriteBatch getBatch() {
+        return batch;
     }
 }
