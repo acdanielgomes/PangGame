@@ -34,7 +34,7 @@ public class Ball extends Sprite {
      * @param playScreen Game references
      */
     public Ball(PlayScreen playScreen, Ball previousBall) {
-        super(new Texture("badlogic.jpg"));
+        super(new Texture("Balloons/LStar.png"));
 
         world = playScreen.getWorld();
 

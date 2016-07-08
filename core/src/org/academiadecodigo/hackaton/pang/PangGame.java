@@ -15,9 +15,12 @@ public class PangGame extends Game {
     public static final int V_WIDTH = 1080;
     public static final int V_HEIGHT = 600;
     public static final float PPM = 100;
-    public static final float PLAYER_WIDTH = 20;
-    public static final float PLAYER_HEIGHT = 50;
+    public static final float PLAYER_WIDTH = 50;
+    public static final float PLAYER_HEIGHT = 60;
     public static final float PLAYER_SPEED = 4f;
+    public static final float HARPOON_WIDTH = 20;
+    public static final float HARPOON_HEIGHT = V_HEIGHT;
+    public static final float HARPOON_SPEED = 4f;
     public static final float BALL_RADIUS = 12.5f;
     public static final float BOUNDARY_THICKNESS = 23;
 

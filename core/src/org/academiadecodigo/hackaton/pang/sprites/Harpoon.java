@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import org.academiadecodigo.hackaton.pang.PangGame;
+import org.academiadecodigo.hackaton.pang.screens.PlayScreen;
 
 /**
  * Created by codecadet on 07/07/16.
@@ -14,23 +16,22 @@ public class Harpoon extends Sprite {
 
     private Body body;
     private PolygonShape shape;
-    private Texture texture;
     private Fixture fixture;
 
+    public Harpoon(PlayScreen playScreen, float x) {
+        super(new Texture("Harpoon/HarpoonStaticP1.png"));
+        world = playScreen.getWorld();
 
-    public Harpoon(int x) {
-
-        world = new World(new Vector2(0, 0), true);
-        texture = new Texture("harpoon.png");
+        this.setSize(PangGame.HARPOON_WIDTH / PangGame.PPM, PangGame.HARPOON_HEIGHT / PangGame.PPM);
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.KinematicBody;
-        bodyDef.position.set(x, 0);
+        bodyDef.position.set(x + PangGame.HARPOON_WIDTH / PangGame.PPM, (PangGame.BOUNDARY_THICKNESS - PangGame.HARPOON_HEIGHT / 2) / PangGame.PPM);
 
         body = world.createBody(bodyDef);
 
         shape = new PolygonShape();
-        shape.setAsBox(texture.getWidth()/ 2, texture.getHeight() / 2);
+        shape.setAsBox((PangGame.HARPOON_WIDTH / 2) / PangGame.PPM, (PangGame.HARPOON_HEIGHT / 2) / PangGame.PPM);
 
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
@@ -41,18 +42,17 @@ public class Harpoon extends Sprite {
         move();
     }
 
-    public void move() {
-        body.applyLinearImpulse(0, 10, texture.getWidth() / 2, texture.getHeight() / 2, true);
+    public void update() {
+        setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
+    }
+
+    private void move() {
+        body.setLinearVelocity(0 , PangGame.HARPOON_SPEED);
     }
 
     public void dispose() {
-        texture.dispose();
+        getTexture().dispose();
         shape.dispose();
-        world.dispose();
-    }
 
-    @Override
-    public Texture getTexture() {
-        return texture;
     }
 }
