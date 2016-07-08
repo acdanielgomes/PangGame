@@ -88,7 +88,7 @@ public class Boundary extends Sprite {
         fdef.filter.categoryBits = PangGame.BOUNDARY_BIT;
 
         // Define who is it
-        fdef.filter.maskBits = PangGame.BALL_BIT | PangGame.HARPOON_BIT;    // Define with whom can collide
+        //fdef.filter.maskBits = PangGame.BALL_BIT | PangGame.HARPOON_BIT;    // Define with whom can collide
 
         // Define material properties
         fdef.shape = shape;

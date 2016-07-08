@@ -26,7 +26,7 @@ public class GameOverScreen implements Screen {
 
     private Texture texture;
 
-    public GameOverScreen(PangGame game, AssetManager manager) {
+    public GameOverScreen(PangGame game, AssetManager manager, int victoPlayer) {
         this.game = game;
         this.manager = manager;
 
@@ -39,7 +39,11 @@ public class GameOverScreen implements Screen {
         //music.setLooping(true);
         //music.play();
 
-        texture = new Texture("Background/Background32.png");
+        if (victoPlayer == 1) {
+            texture = new Texture("Background/Background32.png");
+        } else {
+            texture = new Texture("Background/Background31.png");
+        }
     }
 
     public void update(float delta) {
@@ -48,8 +52,7 @@ public class GameOverScreen implements Screen {
 
     public void keyHandler(float delta) {
 
-        if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
-            System.out.println("asdasd");
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             game.setScreen(new MenuScreen(game, manager));
             dispose();
         }

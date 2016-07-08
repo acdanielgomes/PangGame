@@ -22,8 +22,9 @@ public class PangGame extends Game {
     public static final float HARPOON_HEIGHT = V_HEIGHT;
     public static final float HARPOON_SPEED = 4f;
     public static final float BALL_RADIUS = 15f;
-    public static final float BALL_SPEED = 5f;
+    public static final float BALL_SPEED = 2f;
     public static final float BOUNDARY_THICKNESS = 23;
+    public static final long BALL_SPAWN_TIME = 5;
 
     public static final short BALL_BIT = 1;
     public static final short PLAYER_BIT = 2;
@@ -42,7 +43,7 @@ public class PangGame extends Game {
     public void create() {
         batch = new SpriteBatch();
 
-        setScreen(new PlayScreen(this, manager));
+        setScreen(new MenuScreen(this, manager));
 
     }
 

@@ -53,6 +53,8 @@ public class PlayScreen implements Screen {
     private Boundary left;
     private List<Harpoon> harpoons;
 
+    private long lastSpawn;
+
     private final Texture background = new Texture("Background/background2.png");
 
     public PlayScreen(PangGame game, AssetManager manager) {
@@ -139,6 +141,8 @@ public class PlayScreen implements Screen {
         handleInput(dt);
         world.step(1 / 60f,6, 2);
 
+        spawnBalls(dt);
+
         Iterator<Harpoon> harpoonIterator = harpoons.iterator();
 
         while (harpoonIterator.hasNext()){
@@ -151,10 +155,8 @@ public class PlayScreen implements Screen {
                 harpoon.getOwner().shot();
                 harpoonIterator.remove();
 
-
             }
         }
-
 
         Iterator<Ball> ballIterator = balls.iterator();
 
@@ -170,16 +172,24 @@ public class PlayScreen implements Screen {
                 world.destroyBody(ball.getBody());
 
                 ballIterator.remove();
+            } else if(ball.isDestroy() && ball.getSizeBall() == 4) {
+                world.destroyBody(ball.getBody());
+
+                ballIterator.remove();
             }
         }
 
         player1.update(dt);
         player2.update(dt);
 
-        if (player1.isDead() || player2.isDead()){
-            game.setScreen(new GameOverScreen(game, manager));
+        if (player1.isDead()){
+            game.setScreen(new GameOverScreen(game, manager, 2));
             //dispose();
+        } else if (player2.isDead()) {
+            game.setScreen(new GameOverScreen(game, manager, 1));
         }
+
+
         cam.update();
     }
 
@@ -223,6 +233,17 @@ public class PlayScreen implements Screen {
 
     public World getWorld() {
         return world;
+    }
+
+    private void spawnBalls(float dt) {
+
+        if (System.nanoTime() > lastSpawn) {
+
+            lastSpawn = System.nanoTime() + (1000000000 * PangGame.BALL_SPAWN_TIME);
+
+            balls.add(new Ball(this, null, MathUtils.randomSign()));
+        }
+
     }
 
     @Override
