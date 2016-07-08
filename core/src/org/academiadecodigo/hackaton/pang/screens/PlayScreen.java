@@ -22,6 +22,7 @@ import org.academiadecodigo.hackaton.pang.sprites.Harpoon;
 import org.academiadecodigo.hackaton.pang.sprites.Player;
 import org.academiadecodigo.hackaton.pang.utilities.BoundaryType;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -52,7 +53,7 @@ public class PlayScreen implements Screen {
     private Boundary left;
     private List<Harpoon> harpoons;
 
-    private final Texture background = new Texture("background.png");
+    private final Texture background = new Texture("Background/background2.png");
 
     public PlayScreen(PangGame game, AssetManager manager) {
         this.game = game;
@@ -77,10 +78,7 @@ public class PlayScreen implements Screen {
         left = new Boundary(this, BoundaryType.LEFT_WALL);
 
         balls = new Array<Ball>();
-        balls.add(new Ball(this, null));
-        balls.add(new Ball(this, balls.get(0)));
-        balls.add(new Ball(this, balls.get(1)));
-        balls.add(new Ball(this, balls.get(2)));
+        balls.add(new Ball(this, null, MathUtils.randomSign()));
 
         renderer = new Box2DDebugRenderer();
 
@@ -109,7 +107,9 @@ public class PlayScreen implements Screen {
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) {
-            harpoons.add(player1.shoot());
+
+            if (!player1.getShot()) harpoons.add(player1.shoot());
+
         }
     }
 
@@ -125,7 +125,9 @@ public class PlayScreen implements Screen {
            }
        }
        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-           harpoons.add(player2.shoot());
+
+           if (!player2.getShot()) harpoons.add(player2.shoot());
+
        }
    }
 
@@ -137,13 +139,40 @@ public class PlayScreen implements Screen {
         handleInput(dt);
         world.step(1 / 60f,6, 2);
 
-        for (Harpoon harpoon : harpoons) {
+        Iterator<Harpoon> harpoonIterator = harpoons.iterator();
+
+        while (harpoonIterator.hasNext()){
+            Harpoon harpoon = harpoonIterator.next();
+
             harpoon.update();
+
+            if (harpoon.isDestroyed()){
+                world.destroyBody(harpoon.getBody());
+                harpoon.getOwner().shot();
+                harpoonIterator.remove();
+
+
+            }
         }
 
-        for (Ball ball : balls) {
+
+        Iterator<Ball> ballIterator = balls.iterator();
+
+        while (ballIterator.hasNext()) {
+            Ball ball = ballIterator.next();
+
             ball.update(dt);
+
+            if (ball.isDestroy() && ball.getSizeBall() != 4) {
+                balls.add(new Ball(this, ball, -1));
+                balls.add(new Ball(this, ball, 1));
+
+                world.destroyBody(ball.getBody());
+
+                ballIterator.remove();
+            }
         }
+
         player1.update(dt);
         player2.update(dt);
 

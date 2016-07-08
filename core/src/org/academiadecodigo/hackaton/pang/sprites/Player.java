@@ -17,6 +17,7 @@ public class Player extends Sprite {
     /* Manages all physics GameObjects */
     public World world;
 
+    /* Receive impulses and forces */
     private PlayScreen playScreen;
 
     /* Receive impulses and forces */
@@ -26,6 +27,7 @@ public class Player extends Sprite {
     public Fixture fixture;
 
     private boolean isDead;
+    private boolean shot;
 
     /**
      * Constructor of the Player
@@ -88,7 +90,7 @@ public class Player extends Sprite {
 
         shape.set(vertice);
 
-        //fixtureDef.filter.categoryBits = PangGame.PLAYER_BIT;
+        fixtureDef.filter.categoryBits = PangGame.PLAYER_BIT;
 
         fixtureDef.shape = shape;
 
@@ -122,7 +124,16 @@ public class Player extends Sprite {
         return b2Body;
     }
 
+    public void shot() {
+        shot = false;
+    }
+
+    public boolean getShot() {
+        return shot;
+    }
+
     public Harpoon shoot() {
-        return new Harpoon(playScreen, getX());
+        shot = true;
+        return new Harpoon(playScreen, getX(), this);
     }
 }
