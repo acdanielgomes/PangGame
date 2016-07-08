@@ -8,6 +8,12 @@ import org.academiadecodigo.hackaton.pang.sprites.Player;
 
 /**
  * Created by codecadet on 07/07/16.
+ *
+ * Class responsible to check collisions between:
+ * Balls and Players,
+ * and
+ * Balls and Harpoons
+ *
  */
 public class CollisionDetector implements ContactListener {
     @Override
@@ -45,23 +51,17 @@ public class CollisionDetector implements ContactListener {
     /**
      * @see ContactListener#endContact(Contact)
      */
-    public void endContact(Contact contact) {
-
-    }
+    public void endContact(Contact contact) {}
 
     @Override
     /**
      * @see ContactListener#preSolve(Contact, Manifold)
      */
-    public void preSolve(Contact contact, Manifold oldManifold) {
-
-    }
+    public void preSolve(Contact contact, Manifold oldManifold) {}
 
     @Override
     /**
      * @see ContactListener#postSolve(Contact, ContactImpulse)
      */
-    public void postSolve(Contact contact, ContactImpulse impulse) {
-
-    }
+    public void postSolve(Contact contact, ContactImpulse impulse) {}
 }

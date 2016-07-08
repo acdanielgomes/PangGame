@@ -12,6 +12,14 @@ import org.academiadecodigo.hackaton.pang.screens.PlayScreen;
 
 /**
  * Created by codecadet on 07/07/16.
+ *
+ * Class responsible to give shape, texture for the Players
+ * The Player has states:
+ * STANDING,
+ * RUNNING,
+ * SHOOTING
+ * Generates the animation for the Player
+ * Update the Position
  */
 public class Player extends Sprite {
 

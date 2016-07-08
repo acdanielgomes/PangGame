@@ -9,6 +9,9 @@ import org.academiadecodigo.hackaton.pang.utilities.BoundaryType;
 
 /**
  * Created by codecadet on 07/07/16.
+ *
+ * Class responsible to create boundaries to set
+ * the limits of the world
  */
 public class Boundary extends Sprite {
 

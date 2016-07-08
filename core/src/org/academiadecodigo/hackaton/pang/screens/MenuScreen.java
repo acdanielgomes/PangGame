@@ -14,6 +14,8 @@ import org.academiadecodigo.hackaton.pang.PangGame;
 
 /**
  * Created by codecadet on 07/07/16.
+ *
+ * Class responsible to generate de MenuScreen
  */
 public class MenuScreen implements Screen {
 
@@ -71,9 +73,7 @@ public class MenuScreen implements Screen {
     /**
      * @see Screen#show()
      */
-    public void show() {
-
-    }
+    public void show() {}
 
     @Override
     /**
@@ -107,25 +107,19 @@ public class MenuScreen implements Screen {
     /**
      * @see Screen#pause()
      */
-    public void pause() {
-
-    }
+    public void pause() {}
 
     @Override
     /**
      * @see Screen#resume()
      */
-    public void resume() {
-
-    }
+    public void resume() {}
 
     @Override
     /**
      * @see Screen#hide()
      */
-    public void hide() {
-
-    }
+    public void hide() {}
 
     @Override
     /**
