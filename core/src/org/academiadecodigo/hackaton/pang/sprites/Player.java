@@ -17,14 +17,15 @@ public class Player extends Sprite {
     /* Manages all physics GameObjects */
     public World world;
 
-    /* Receive impulses and forces */
-
     private PlayScreen playScreen;
 
+    /* Receive impulses and forces */
     private Body b2Body;
 
     /* Describes properties (size and shape) of an object */
     public Fixture fixture;
+
+    private boolean isDead;
 
     /**
      * Constructor of the Player
@@ -36,7 +37,7 @@ public class Player extends Sprite {
      */
     public Player(PlayScreen screen, float x, float y) {
 
-        super(new Texture("Player1/P1animationLeft/P1MoveL1.png")); // TODO: 07/07/16 player image
+        super(new Texture("Player1/P1animationLeft/P1MoveL1.png"));
 
         playScreen = screen;
         this.world = screen.getWorld();
@@ -51,6 +52,7 @@ public class Player extends Sprite {
      * @param dt Time since the last update
      */
     public void update(float dt) {
+
         setPosition(b2Body.getPosition().x - getWidth() / 2, b2Body.getPosition().y - getHeight() / 2);
     }
 
@@ -96,6 +98,19 @@ public class Player extends Sprite {
         fixture = b2Body.createFixture(fixtureDef);
         fixture.setUserData(this);
 
+    }
+
+    public void onHit(){
+        isDead = true;
+    }
+
+    /**
+     * Getter for boolean isDead
+     *
+     * @return if the player is dead
+     */
+    public boolean isDead() {
+        return isDead;
     }
 
     /**
