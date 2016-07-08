@@ -9,6 +9,10 @@ import org.academiadecodigo.hackaton.pang.screens.PlayScreen;
 
 /**
  * Created by codecadet on 07/07/16.
+ *
+ * Class responsible to give shape, texture for the Balls
+ * Sets the position in the world
+ *
  */
 public class Ball extends Sprite {
 

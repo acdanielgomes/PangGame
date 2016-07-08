@@ -8,6 +8,12 @@ import org.academiadecodigo.hackaton.pang.screens.PlayScreen;
 
 /**
  * Created by codecadet on 07/07/16.
+ *
+ * Class responsible to give shape, texture for the Harpoon
+ * Sets the position in the world according to the
+ * body position
+ * Check if the Harpoon collide with the top boundary
+ *
  */
 public class Harpoon extends Sprite {
 

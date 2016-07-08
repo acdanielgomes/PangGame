@@ -30,6 +30,11 @@ import java.util.List;
 
 /**
  * Created by codecadet on 07/07/16.
+ *
+ * Class responsible to generate the PlayScreen
+ * Set the screen limits
+ * Instantiate Players and Balls
+ * Inputs from keyboard
  */
 public class PlayScreen implements Screen {
 
@@ -106,7 +111,6 @@ public class PlayScreen implements Screen {
         shootSound = manager.get("GunClank.mp3");
         ballPop = manager.get("BubblePoP.mp3");
 
-
     }
 
     private void update(float dt) {
@@ -163,7 +167,6 @@ public class PlayScreen implements Screen {
             game.setScreen(new GameOverScreen(game, manager, 1));
         }
 
-
         cam.update();
     }
 
@@ -194,7 +197,6 @@ public class PlayScreen implements Screen {
                 harpoons.add(player1.shoot());
                 shootSound.play();
             }
-
         }
     }
 
@@ -218,7 +220,6 @@ public class PlayScreen implements Screen {
                harpoons.add(player2.shoot());
                shootSound.play();
            }
-
        }
    }
 
@@ -255,9 +256,7 @@ public class PlayScreen implements Screen {
     /**
      * @see Screen#show()
      */
-    public void show() {
-
-    }
+    public void show() {}
 
     @Override
     /**
@@ -294,33 +293,25 @@ public class PlayScreen implements Screen {
     /**
      * @see Screen#resize(int, int)
      */
-    public void resize(int width, int height) {
-
-    }
+    public void resize(int width, int height) {}
 
     @Override
     /**
      * @see Screen#pause()
      */
-    public void pause() {
-
-    }
+    public void pause() {}
 
     @Override
     /**
      * @see Screen#resume()
      */
-    public void resume() {
-
-    }
+    public void resume() {}
 
     @Override
     /**
      * @see Screen#hide()
      */
-    public void hide() {
-
-    }
+    public void hide() {}
 
     @Override
     /**
