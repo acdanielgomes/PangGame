@@ -118,7 +118,7 @@ public class Player extends Sprite {
 
     public Harpoon shoot() {
         shot = true;
-        return new Harpoon(playScreen, getX());
+        return new Harpoon(playScreen, getX(), this);
     }
 
     public void onHit(){

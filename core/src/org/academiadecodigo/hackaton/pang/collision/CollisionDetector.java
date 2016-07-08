@@ -3,6 +3,7 @@ package org.academiadecodigo.hackaton.pang.collision;
 import com.badlogic.gdx.physics.box2d.*;
 import org.academiadecodigo.hackaton.pang.PangGame;
 import org.academiadecodigo.hackaton.pang.sprites.Ball;
+import org.academiadecodigo.hackaton.pang.sprites.Harpoon;
 import org.academiadecodigo.hackaton.pang.sprites.Player;
 
 /**
@@ -29,8 +30,10 @@ public class CollisionDetector implements ContactListener {
             case PangGame.BALL_BIT | PangGame.HARPOON_BIT:
                 if (fixA.getFilterData().categoryBits == PangGame.BALL_BIT) {
                     ((Ball) fixA.getUserData()).destroy();
+                    ((Harpoon) fixB.getUserData()).destroy();
                 } else {
                     ((Ball) fixB.getUserData()).destroy();
+                    ((Harpoon) fixA.getUserData()).destroy();
                 }
                 break;
         }

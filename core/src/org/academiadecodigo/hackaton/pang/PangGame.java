@@ -17,17 +17,19 @@ public class PangGame extends Game {
     public static final float PPM = 100;
     public static final float PLAYER_WIDTH = 50;
     public static final float PLAYER_HEIGHT = 60;
-    public static final float PLAYER_SPEED = 4f;
+    public static final float PLAYER_SPEED = 3f;
     public static final float HARPOON_WIDTH = 20;
     public static final float HARPOON_HEIGHT = V_HEIGHT;
     public static final float HARPOON_SPEED = 4f;
-    public static final float BALL_RADIUS = 12.5f;
+    public static final float BALL_RADIUS = 15f;
+    public static final float BALL_SPEED = 5f;
     public static final float BOUNDARY_THICKNESS = 23;
 
     public static final short BALL_BIT = 1;
     public static final short PLAYER_BIT = 2;
     public static final short HARPOON_BIT = 8;
     public static final short BOUNDARY_BIT = 16;
+    public static final short BOUNDARY_TOP_BIT = 32;
 
     public SpriteBatch getBatch() {
         return batch;

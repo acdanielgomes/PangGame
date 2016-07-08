@@ -7,6 +7,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -21,6 +22,7 @@ import org.academiadecodigo.hackaton.pang.sprites.Harpoon;
 import org.academiadecodigo.hackaton.pang.sprites.Player;
 import org.academiadecodigo.hackaton.pang.utilities.BoundaryType;
 
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -51,7 +53,7 @@ public class PlayScreen implements Screen {
     private Boundary left;
     private List<Harpoon> harpoons;
 
-    private final Texture background = new Texture("background.png");
+    private final Texture background = new Texture("Background/background2.png");
 
     public PlayScreen(PangGame game, AssetManager manager) {
         this.game = game;
@@ -76,7 +78,7 @@ public class PlayScreen implements Screen {
         left = new Boundary(this, BoundaryType.LEFT_WALL);
 
         balls = new Array<Ball>();
-        balls.add(new Ball(this, null));
+        balls.add(new Ball(this, null, MathUtils.randomSign()));
 
         renderer = new Box2DDebugRenderer();
 
@@ -137,19 +139,40 @@ public class PlayScreen implements Screen {
         handleInput(dt);
         world.step(1 / 60f,6, 2);
 
-        for (Harpoon harpoon : harpoons) {
+        Iterator<Harpoon> harpoonIterator = harpoons.iterator();
+
+        while (harpoonIterator.hasNext()){
+            Harpoon harpoon = harpoonIterator.next();
+
             harpoon.update();
+
+            if (harpoon.isDestroyed()){
+                world.destroyBody(harpoon.getBody());
+                harpoon.getOwner().shot();
+                harpoonIterator.remove();
+
+
+            }
         }
 
-        for (Ball ball : balls) {
+
+        Iterator<Ball> ballIterator = balls.iterator();
+
+        while (ballIterator.hasNext()) {
+            Ball ball = ballIterator.next();
+
             ball.update(dt);
 
             if (ball.isDestroy() && ball.getSizeBall() != 4) {
-                balls.add(new Ball(this, ball));
-                balls.add(new Ball(this, ball));
-            }
+                balls.add(new Ball(this, ball, -1));
+                balls.add(new Ball(this, ball, 1));
 
+                world.destroyBody(ball.getBody());
+
+                ballIterator.remove();
+            }
         }
+
         player1.update(dt);
         player2.update(dt);
 

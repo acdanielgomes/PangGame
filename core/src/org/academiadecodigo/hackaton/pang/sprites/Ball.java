@@ -28,6 +28,7 @@ public class Ball extends Sprite {
     private int sizeBall;
 
     private boolean isDestroy;
+    private float dir;
 
     /**
      * Construct a ball
@@ -36,8 +37,11 @@ public class Ball extends Sprite {
      *
      * @param playScreen Game references
      */
-    public Ball(PlayScreen playScreen, Ball previousBall) {
+    public Ball(PlayScreen playScreen, Ball previousBall, float dir) {
         super(new Texture("Balloons/LStar.png"));
+
+        this.previousBall = previousBall;
+        this.dir = dir;
 
         world = playScreen.getWorld();
 
@@ -59,7 +63,7 @@ public class Ball extends Sprite {
      * @param delta Time since the last update
      */
     public void update(float delta) {
-        if (!isDestroy) setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
+        setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
     }
 
     /**
@@ -67,7 +71,8 @@ public class Ball extends Sprite {
      */
     private void defineBall() {
         body = setBodyDef();
-        body.applyLinearImpulse(new Vector2(10f * MathUtils.randomSign(), 0), body.getWorldCenter(), true);
+        body.applyLinearImpulse(new Vector2(PangGame.BALL_SPEED * dir, 0), body.getWorldCenter(), true);
+
         setFixtureDef();
     }
 
@@ -81,7 +86,11 @@ public class Ball extends Sprite {
         // Holds all the data needed to construct a rigid body
         BodyDef bodyDef = new BodyDef();
 
-        bodyDef.position.set(PangGame.V_WIDTH / 2 / PangGame.PPM, PangGame.V_HEIGHT / 2 / PangGame.PPM);
+        if (previousBall == null) {
+            bodyDef.position.set(PangGame.V_WIDTH / 2 / PangGame.PPM, PangGame.V_HEIGHT / 2 / PangGame.PPM);
+        } else {
+            bodyDef.position.set(previousBall.getX(), previousBall.getY());
+        }
 
         // Velocity determined by forces
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -144,8 +153,6 @@ public class Ball extends Sprite {
      */
     public Body getBody() {
         return body;
-    }
-    public void destroy(){
     }
 }
 
