@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -53,6 +55,10 @@ public class PlayScreen implements Screen {
     // Last time it create a ball
     private long lastSpawn;
 
+    private Sound shootSound;
+    private Sound ballPop;
+    private Sound victory;
+
     /**
      * Constructor method
      *
@@ -97,6 +103,12 @@ public class PlayScreen implements Screen {
 
         harpoons = new LinkedList<Harpoon>();
 
+        shootSound = manager.get("gamesounds/GunClank.mp3");
+        ballPop = manager.get("gamesounds/BubblePop.mp3");
+
+
+
+
         //animationManager.load(1, "L", 1);
     }
 
@@ -129,6 +141,7 @@ public class PlayScreen implements Screen {
             ball.update();
 
             if (ball.isDestroy() && ball.getSizeBall() != 4) {
+                ballPop.play();
                 balls.add(new Ball(this, ball, -1));
                 balls.add(new Ball(this, ball, 1));
 
@@ -136,6 +149,7 @@ public class PlayScreen implements Screen {
 
                 ballIterator.remove();
             } else if(ball.isDestroy() && ball.getSizeBall() == 4) {
+                ballPop.play();
                 world.destroyBody(ball.getBody());
 
                 ballIterator.remove();
@@ -179,7 +193,10 @@ public class PlayScreen implements Screen {
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) {
-            if (!player1.getShot()) harpoons.add(player1.shoot());
+            if (!player1.getShot()) {
+                harpoons.add(player1.shoot());
+                shootSound.play();
+            }
 
         }
     }
@@ -200,7 +217,10 @@ public class PlayScreen implements Screen {
        }
        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
 
-           if (!player2.getShot()) harpoons.add(player2.shoot());
+           if (!player2.getShot()) {
+               harpoons.add(player2.shoot());
+               shootSound.play();
+           }
 
        }
    }
