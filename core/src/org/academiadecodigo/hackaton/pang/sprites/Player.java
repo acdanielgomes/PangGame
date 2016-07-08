@@ -34,9 +34,9 @@ public class Player extends Sprite {
      * @param x Position X axis
      * @param y Position Y axis
      */
-    public Player(PlayScreen screen, float x, float y) {
+    public Player(PlayScreen screen, float x, float y, int playerNumber) {
 
-        super(new Texture("Player1/P1animationLeft/P1MoveL1.png")); // TODO: 07/07/16 player image
+        super(new Texture("Player" + playerNumber + "/P" + playerNumber + "Still.png"));
 
         playScreen = screen;
         this.world = screen.getWorld();

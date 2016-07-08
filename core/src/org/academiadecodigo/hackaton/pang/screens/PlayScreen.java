@@ -20,6 +20,7 @@ import org.academiadecodigo.hackaton.pang.sprites.Ball;
 import org.academiadecodigo.hackaton.pang.sprites.Boundary;
 import org.academiadecodigo.hackaton.pang.sprites.Harpoon;
 import org.academiadecodigo.hackaton.pang.sprites.Player;
+import org.academiadecodigo.hackaton.pang.utilities.AnimationManager;
 import org.academiadecodigo.hackaton.pang.utilities.BoundaryType;
 
 import java.util.LinkedList;
@@ -51,6 +52,8 @@ public class PlayScreen implements Screen {
     private Boundary right;
     private Boundary left;
     private List<Harpoon> harpoons;
+
+    private AnimationManager animationManager = new AnimationManager();
 
     private final Texture background = new Texture("background.png");
 
@@ -86,8 +89,8 @@ public class PlayScreen implements Screen {
 
         float playerPosY = PangGame.BOUNDARY_THICKNESS + PangGame.PLAYER_HEIGHT / 2;
 
-        player1 = new Player(this, POS_PLAYER1, playerPosY);
-        player2 = new Player(this, POS_PLAYER2, playerPosY);
+        player1 = new Player(this, POS_PLAYER1, playerPosY, 1);
+        player2 = new Player(this, POS_PLAYER2, playerPosY, 2);
         harpoons = new LinkedList<Harpoon>();
 
     }
@@ -100,8 +103,10 @@ public class PlayScreen implements Screen {
     private void handlePlayer1Input() {
         if (Gdx.input.isKeyPressed(Input.Keys.Z)) {
             player1.getBody().setLinearVelocity(-PangGame.PLAYER_SPEED, 0);
+            animationManager.load(1, "L", 1);
         } else if (Gdx.input.isKeyPressed(Input.Keys.X)) {
             player1.getBody().setLinearVelocity(PangGame.PLAYER_SPEED, 0);
+            animationManager.load(1, "R", 2);
         } else {
             Vector2 p1Vel = player1.getBody().getLinearVelocity();
             if (p1Vel.x != 0 || p1Vel.y != 0) {
@@ -110,6 +115,7 @@ public class PlayScreen implements Screen {
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) {
             harpoons.add(player1.shoot());
+            animationManager.load(1, "S", 3);
         }
     }
 
