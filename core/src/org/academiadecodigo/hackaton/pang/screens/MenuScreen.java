@@ -45,7 +45,7 @@ public class MenuScreen implements Screen {
 
         cam.position.set(PangGame.V_WIDTH / 2, PangGame.V_HEIGHT / 2, 0);
 
-        music = manager.get("gamesounds/SoundTrack.mp3", Music.class);
+        music = manager.get("SoundTrack.mp3", Music.class);
         music.setLooping(true);
         music.play();
 
