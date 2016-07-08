@@ -2,6 +2,10 @@ package org.academiadecodigo.hackaton.pang;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import org.academiadecodigo.hackaton.pang.screens.MenuScreen;
 
@@ -40,7 +44,16 @@ public class PangGame extends Game {
      * @see Game#create()
      */
     public void create() {
+
         batch = new SpriteBatch();
+
+        manager = new AssetManager();
+        manager.load("gamesounds/SoundTrack.mp3", Music.class);
+        manager.load("gamesounds/BubblePop.mp3", Sound.class);
+        manager.load("gamesounds/GunClank.mp3", Sound.class);
+        manager.finishLoading();
+
+
         setScreen(new MenuScreen(this, manager));
     }
 
@@ -59,6 +72,7 @@ public class PangGame extends Game {
     public void dispose() {
         super.dispose();
         batch.dispose();
+        manager.dispose();
     }
 
     /**

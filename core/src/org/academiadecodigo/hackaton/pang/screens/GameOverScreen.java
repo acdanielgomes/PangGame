@@ -45,10 +45,6 @@ public class GameOverScreen implements Screen {
 
         cam.position.set(PangGame.V_WIDTH / 2, PangGame.V_HEIGHT / 2, 0);
 
-        //music = manager.get("gameover.mp3", Music.class);
-        //music.setLooping(true);
-        //music.play();
-
         texture = new Texture("WinLoose/P" + victoPlayer + "Wins.png");
         text = new Texture("WinLoose/P" + victoPlayer + "WinsLettering.png");
 
