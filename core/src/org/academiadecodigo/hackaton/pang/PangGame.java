@@ -48,9 +48,9 @@ public class PangGame extends Game {
         batch = new SpriteBatch();
 
         manager = new AssetManager();
-        manager.load("gamesounds/SoundTrack.mp3", Music.class);
-        manager.load("gamesounds/BubblePop.mp3", Sound.class);
-        manager.load("gamesounds/GunClank.mp3", Sound.class);
+        manager.load("SoundTrack.mp3", Music.class);
+        manager.load("BubblePoP.mp3", Sound.class);
+        manager.load("GunClank.mp3", Sound.class);
         manager.finishLoading();
 
 
