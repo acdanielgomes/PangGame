@@ -18,13 +18,16 @@ public class Player extends Sprite {
     public World world;
 
     /* Receive impulses and forces */
-
     private PlayScreen playScreen;
 
+    /* Receive impulses and forces */
     private Body b2Body;
 
     /* Describes properties (size and shape) of an object */
     public Fixture fixture;
+
+    private boolean isDead;
+    private boolean shot;
 
     /**
      * Constructor of the Player
@@ -51,6 +54,7 @@ public class Player extends Sprite {
      * @param dt Time since the last update
      */
     public void update(float dt) {
+
         setPosition(b2Body.getPosition().x - getWidth() / 2, b2Body.getPosition().y - getHeight() / 2);
     }
 
@@ -86,7 +90,7 @@ public class Player extends Sprite {
 
         shape.set(vertice);
 
-        //fixtureDef.filter.categoryBits = PangGame.PLAYER_BIT;
+        fixtureDef.filter.categoryBits = PangGame.PLAYER_BIT;
 
         fixtureDef.shape = shape;
 
@@ -98,6 +102,19 @@ public class Player extends Sprite {
 
     }
 
+    public void onHit(){
+        isDead = true;
+    }
+
+    /**
+     * Getter for boolean isDead
+     *
+     * @return if the player is dead
+     */
+    public boolean isDead() {
+        return isDead;
+    }
+
     /**
      * Getter for Body
      *
@@ -107,7 +124,16 @@ public class Player extends Sprite {
         return b2Body;
     }
 
+    public void shot() {
+        shot = false;
+    }
+
+    public boolean getShot() {
+        return shot;
+    }
+
     public Harpoon shoot() {
-        return new Harpoon(playScreen, getX());
+        shot = true;
+        return new Harpoon(playScreen, getX(), this);
     }
 }

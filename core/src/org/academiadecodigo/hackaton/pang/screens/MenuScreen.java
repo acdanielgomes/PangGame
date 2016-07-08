@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -36,11 +37,11 @@ public class MenuScreen implements Screen {
 
         cam.position.set(PangGame.V_WIDTH / 2, PangGame.V_HEIGHT / 2, 0);
 
-        music = manager.get("intro.mp3", Music.class);
-        music.setLooping(true);
-        music.play();
+        //music = manager.get("intro.mp3", Music.class);
+        //music.setLooping(true);
+        //music.play();
 
-        texture = new Texture("menuBackground.png");
+        //texture = new Texture("menuBackground.png");
     }
 
     public void update(float delta) {
@@ -49,7 +50,7 @@ public class MenuScreen implements Screen {
 
     public void keyHandler(float delta) {
 
-        if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
 
             game.setScreen(new PlayScreen(game, manager));
             dispose();
@@ -63,12 +64,14 @@ public class MenuScreen implements Screen {
 
     @Override
     public void render(float delta) {
+        Gdx.gl.glClearColor(0,0,0,1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         update(delta);
 
         game.getBatch().setProjectionMatrix(cam.combined);
         game.getBatch().begin();
-        game.getBatch().draw(texture, 0, cam.position.y - cam.viewportHeight / 2);
+        //game.getBatch().draw(texture, 0, cam.position.y - cam.viewportHeight / 2);
         game.getBatch().end();
 
     }
@@ -95,7 +98,7 @@ public class MenuScreen implements Screen {
 
     @Override
     public void dispose() {
-        texture.dispose();
-        music.dispose();
+        //texture.dispose();
+        //music.dispose();
     }
 }

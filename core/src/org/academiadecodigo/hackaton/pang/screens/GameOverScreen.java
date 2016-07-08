@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.viewport.FitViewport;
@@ -25,7 +26,7 @@ public class GameOverScreen implements Screen {
 
     private Texture texture;
 
-    public GameOverScreen(PangGame game, AssetManager manager) {
+    public GameOverScreen(PangGame game, AssetManager manager, int victoPlayer) {
         this.game = game;
         this.manager = manager;
 
@@ -34,11 +35,15 @@ public class GameOverScreen implements Screen {
 
         cam.position.set(PangGame.V_WIDTH / 2, PangGame.V_HEIGHT / 2, 0);
 
-        music = manager.get("gameover.mp3", Music.class);
-        music.setLooping(true);
-        music.play();
+        //music = manager.get("gameover.mp3", Music.class);
+        //music.setLooping(true);
+        //music.play();
 
-        texture = new Texture("menuGameover.png");
+        if (victoPlayer == 1) {
+            texture = new Texture("Background/Background32.png");
+        } else {
+            texture = new Texture("Background/Background31.png");
+        }
     }
 
     public void update(float delta) {
@@ -47,10 +52,7 @@ public class GameOverScreen implements Screen {
 
     public void keyHandler(float delta) {
 
-        update(delta);
-
-        if (Gdx.input.isKeyPressed(Input.Keys.ENTER)) {
-
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             game.setScreen(new MenuScreen(game, manager));
             dispose();
         }
@@ -66,9 +68,12 @@ public class GameOverScreen implements Screen {
 
         update(delta);
 
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         game.getBatch().setProjectionMatrix(cam.combined);
         game.getBatch().begin();
-        game.getBatch().draw(texture, 0, cam.position.y - cam.viewportHeight / 2);
+        game.getBatch().draw(texture, 0, cam.position.y - cam.viewportHeight / 2, PangGame.V_WIDTH, PangGame.V_HEIGHT);
         game.getBatch().end();
     }
 
@@ -94,7 +99,7 @@ public class GameOverScreen implements Screen {
 
     @Override
     public void dispose() {
-        texture.dispose();
-        music.dispose();
+        //texture.dispose();
+        //music.dispose();
     }
 }

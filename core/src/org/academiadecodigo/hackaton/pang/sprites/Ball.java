@@ -22,19 +22,26 @@ public class Ball extends Sprite {
     // Describes properties(size, shape) of an object
     private Fixture fixture;
 
+    // Used to create new balls when a collision occurs
     private Ball previousBall;
 
     private int sizeBall;
 
+    private boolean isDestroy;
+    private float dir;
+
     /**
-     * Constructor of a ball
+     * Construct a ball
      * Set texture, size
      * and reference to the game world
      *
      * @param playScreen Game references
      */
-    public Ball(PlayScreen playScreen, Ball previousBall) {
+    public Ball(PlayScreen playScreen, Ball previousBall, float dir) {
         super(new Texture("Balloons/LStar.png"));
+
+        this.previousBall = previousBall;
+        this.dir = dir;
 
         world = playScreen.getWorld();
 
@@ -64,7 +71,8 @@ public class Ball extends Sprite {
      */
     private void defineBall() {
         body = setBodyDef();
-        body.applyLinearImpulse(new Vector2(10f * MathUtils.randomSign(), 0), body.getWorldCenter(), true);
+        body.applyLinearImpulse(new Vector2(PangGame.BALL_SPEED * dir, 0), body.getWorldCenter(), true);
+
         setFixtureDef();
     }
 
@@ -78,7 +86,11 @@ public class Ball extends Sprite {
         // Holds all the data needed to construct a rigid body
         BodyDef bodyDef = new BodyDef();
 
-        bodyDef.position.set(PangGame.V_WIDTH / 2 / PangGame.PPM, PangGame.V_HEIGHT / 2 / PangGame.PPM);
+        if (previousBall == null) {
+            bodyDef.position.set(PangGame.V_WIDTH / 2 / PangGame.PPM, PangGame.V_HEIGHT / 2 / PangGame.PPM);
+        } else {
+            bodyDef.position.set(previousBall.getX(), previousBall.getY());
+        }
 
         // Velocity determined by forces
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -97,8 +109,8 @@ public class Ball extends Sprite {
         shape.setRadius(PangGame.BALL_RADIUS / PangGame.PPM / sizeBall);
 
         // For collision detection
-//        fdef.filter.categoryBits = PangGame.BALL_BIT;                                           // Define who is it
-//        fdef.filter.maskBits = PangGame.BLOCK_BIT | PangGame.EDGE_BIT | PangGame.PADDLE_BIT;    // Define with whom can collide
+        fdef.filter.categoryBits = PangGame.BALL_BIT;                                           // Define who is it
+        fdef.filter.maskBits = PangGame.BOUNDARY_BIT | PangGame.PLAYER_BIT | PangGame.HARPOON_BIT;    // Define with whom can collide
 
         // Define material properties
         fdef.shape = shape;
@@ -109,6 +121,27 @@ public class Ball extends Sprite {
         fixture.setUserData(this);
     }
 
+    /**
+     * Setter
+     */
+    public void destroy() {
+        isDestroy = true;
+    }
+
+    /**
+     * Getter
+     *
+     * @return
+     */
+    public boolean isDestroy() {
+        return isDestroy;
+    }
+
+    /**
+     * Getter
+     *
+     * @return
+     */
     public int getSizeBall() {
         return sizeBall;
     }
@@ -122,3 +155,5 @@ public class Ball extends Sprite {
         return body;
     }
 }
+
+
