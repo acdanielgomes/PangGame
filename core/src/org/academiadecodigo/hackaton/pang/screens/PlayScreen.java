@@ -33,7 +33,7 @@ import java.util.List;
  */
 public class PlayScreen implements Screen {
 
-    private final Texture background = new Texture("Background/background" + MathUtils.random(1, 32) + ".png");
+    private final Texture background = new Texture("Background" + MathUtils.random(1, 32) + ".png");
 
     private PangGame game;
     private AssetManager manager;
@@ -103,8 +103,8 @@ public class PlayScreen implements Screen {
 
         harpoons = new LinkedList<Harpoon>();
 
-        shootSound = manager.get("gamesounds/GunClank.mp3");
-        ballPop = manager.get("gamesounds/BubblePop.mp3");
+        shootSound = manager.get("GunClank.mp3");
+        ballPop = manager.get("BubblePoP.mp3");
 
 
 
