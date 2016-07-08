@@ -55,7 +55,7 @@ public class PlayScreen implements Screen {
 
     private long lastSpawn;
 
-    private final Texture background = new Texture("Background/background2.png");
+    private final Texture background = new Texture("Background/background" + MathUtils.random(1, 32) + ".png");
 
     public PlayScreen(PangGame game, AssetManager manager) {
         this.game = game;
