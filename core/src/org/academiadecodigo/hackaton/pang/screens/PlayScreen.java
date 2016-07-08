@@ -18,12 +18,17 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import org.academiadecodigo.hackaton.pang.PangGame;
 import org.academiadecodigo.hackaton.pang.collision.CollisionDetector;
+import org.academiadecodigo.hackaton.pang.networking.ClientIn;
+import org.academiadecodigo.hackaton.pang.networking.ClientOut;
 import org.academiadecodigo.hackaton.pang.sprites.Ball;
 import org.academiadecodigo.hackaton.pang.sprites.Boundary;
 import org.academiadecodigo.hackaton.pang.sprites.Harpoon;
 import org.academiadecodigo.hackaton.pang.sprites.Player;
 import org.academiadecodigo.hackaton.pang.utilities.BoundaryType;
 
+import java.net.DatagramSocket;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -59,6 +64,10 @@ public class PlayScreen implements Screen {
     private Sound ballPop;
     private Sound victory;
 
+    private ClientIn clientIn;
+    private ClientOut clientOut;
+    private DatagramSocket datagramSocket;
+
     /**
      * Constructor method
      *
@@ -92,7 +101,7 @@ public class PlayScreen implements Screen {
         new Boundary(this, BoundaryType.LEFT_WALL);
 
         balls = new Array<Ball>();
-        balls.add(new Ball(this, null, MathUtils.randomSign()));
+        //balls.add(new Ball(this, null, MathUtils.randomSign()));
 
         renderer = new Box2DDebugRenderer();
 
@@ -106,14 +115,30 @@ public class PlayScreen implements Screen {
         shootSound = manager.get("GunClank.mp3");
         ballPop = manager.get("BubblePoP.mp3");
 
+        try {
 
+            this.datagramSocket = new DatagramSocket(8081);
+
+            clientIn = new ClientIn(datagramSocket);
+            Thread clientThread = new Thread(clientIn);
+            clientThread.start();
+
+            clientOut = new ClientOut(datagramSocket, player1);
+            Thread clientThread1 = new Thread(clientOut);
+            clientThread1.start();
+
+        } catch (SocketException e) {
+            e.printStackTrace();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
     }
 
     private void update(float dt) {
         handleInput();
         world.step(1 / 60f,6, 2);
 
-        spawnBalls();
+        //spawnBalls();
 
         Iterator<Harpoon> harpoonIterator = harpoons.iterator();
 
@@ -172,7 +197,17 @@ public class PlayScreen implements Screen {
      */
     private void handleInput() {
         handlePlayer1Input();
-        handlePlayer2Input();
+
+        //player2.getBody().getPosition().x = clientIn.getPosition()[0];
+        //player2.getBody().getPosition().y = clientIn.getPosition()[0];
+
+        player2.getBody().setTransform(new Vector2(clientIn.getPosition()[0],clientIn.getPosition()[1]), player2.getBody().getAngle());
+
+        if (clientIn.isShooting()) {
+            harpoons.add(player2.shoot());
+        }
+
+        // handlePlayer2Input();
     }
 
     /**
@@ -201,7 +236,7 @@ public class PlayScreen implements Screen {
     /**
      * Player2 listener
      */
-    private void handlePlayer2Input() {
+    public void handlePlayer2Input() {
         if (Gdx.input.isKeyPressed(Input.Keys.M) && player2.getBody().getPosition().x - (PangGame.PLAYER_WIDTH / 2 / PangGame.PPM) - (PangGame.BOUNDARY_THICKNESS / PangGame.PPM) > 0) {
             player2.getBody().setLinearVelocity(-PangGame.PLAYER_SPEED, 0);
         } else if (Gdx.input.isKeyPressed(Input.Keys.COMMA) && player2.getBody().getPosition().x + (PangGame.PLAYER_WIDTH / 2 / PangGame.PPM) + (PangGame.BOUNDARY_THICKNESS / PangGame.PPM) < PangGame.V_WIDTH / PangGame.PPM) {

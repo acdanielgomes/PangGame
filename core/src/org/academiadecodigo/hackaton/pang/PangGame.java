@@ -28,6 +28,9 @@ public class PangGame extends Game {
     public static final float BALL_SPAWN_HEIGHT = 500;
     public static final float SMALL_BALLS_VERTICAL_IMPULSE = 4f;
 
+    public static final int PORT_PLAYER1 = 10001;
+    public static final int PORT_PLAYER2 = 10002;
+
     public static final short BALL_BIT = 1;
     public static final short PLAYER_BIT = 2;
     public static final short HARPOON_BIT = 8;
