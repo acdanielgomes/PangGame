@@ -107,9 +107,6 @@ public class PlayScreen implements Screen {
         ballPop = manager.get("BubblePoP.mp3");
 
 
-
-
-        //animationManager.load(1, "L", 1);
     }
 
     private void update(float dt) {
