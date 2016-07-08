@@ -7,7 +7,6 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -78,9 +77,6 @@ public class PlayScreen implements Screen {
 
         balls = new Array<Ball>();
         balls.add(new Ball(this, null));
-        balls.add(new Ball(this, balls.get(0)));
-        balls.add(new Ball(this, balls.get(1)));
-        balls.add(new Ball(this, balls.get(2)));
 
         renderer = new Box2DDebugRenderer();
 
@@ -109,7 +105,9 @@ public class PlayScreen implements Screen {
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.SHIFT_LEFT)) {
-            harpoons.add(player1.shoot());
+
+            if (!player1.getShot()) harpoons.add(player1.shoot());
+
         }
     }
 
@@ -125,7 +123,9 @@ public class PlayScreen implements Screen {
            }
        }
        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-           harpoons.add(player2.shoot());
+
+           if (!player2.getShot()) harpoons.add(player2.shoot());
+
        }
    }
 
@@ -143,6 +143,12 @@ public class PlayScreen implements Screen {
 
         for (Ball ball : balls) {
             ball.update(dt);
+
+            if (ball.isDestroy() && ball.getSizeBall() != 4) {
+                balls.add(new Ball(this, ball));
+                balls.add(new Ball(this, ball));
+            }
+
         }
         player1.update(dt);
         player2.update(dt);

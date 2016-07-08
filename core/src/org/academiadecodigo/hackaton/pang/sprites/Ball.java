@@ -22,12 +22,15 @@ public class Ball extends Sprite {
     // Describes properties(size, shape) of an object
     private Fixture fixture;
 
+    // Used to create new balls when a collision occurs
     private Ball previousBall;
 
     private int sizeBall;
 
+    private boolean isDestroy;
+
     /**
-     * Constructor of a ball
+     * Construct a ball
      * Set texture, size
      * and reference to the game world
      *
@@ -56,7 +59,7 @@ public class Ball extends Sprite {
      * @param delta Time since the last update
      */
     public void update(float delta) {
-        setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
+        if (!isDestroy) setPosition(body.getPosition().x - getWidth() / 2, body.getPosition().y - getHeight() / 2);
     }
 
     /**
@@ -109,6 +112,27 @@ public class Ball extends Sprite {
         fixture.setUserData(this);
     }
 
+    /**
+     * Setter
+     */
+    public void destroy() {
+        isDestroy = true;
+    }
+
+    /**
+     * Getter
+     *
+     * @return
+     */
+    public boolean isDestroy() {
+        return isDestroy;
+    }
+
+    /**
+     * Getter
+     *
+     * @return
+     */
     public int getSizeBall() {
         return sizeBall;
     }

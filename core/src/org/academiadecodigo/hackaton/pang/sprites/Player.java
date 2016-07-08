@@ -18,13 +18,14 @@ public class Player extends Sprite {
     public World world;
 
     /* Receive impulses and forces */
-
     private PlayScreen playScreen;
 
     private Body b2Body;
 
     /* Describes properties (size and shape) of an object */
     public Fixture fixture;
+
+    private boolean shot;
 
     /**
      * Constructor of the Player
@@ -107,7 +108,16 @@ public class Player extends Sprite {
         return b2Body;
     }
 
+    public void shot() {
+        shot = false;
+    }
+
+    public boolean getShot() {
+        return shot;
+    }
+
     public Harpoon shoot() {
+        shot = true;
         return new Harpoon(playScreen, getX());
     }
 }
