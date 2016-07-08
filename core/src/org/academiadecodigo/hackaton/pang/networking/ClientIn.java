@@ -35,7 +35,7 @@ public class ClientIn implements Runnable {
                 String[] data = new String(datagramPacket.getData()).split(":");
 
                 position[0] = Float.parseFloat(data[0]);
-                position[1] = PangGame.BOUNDARY_THICKNESS + PangGame.PLAYER_HEIGHT / 2;
+                position[1] = (PangGame.BOUNDARY_THICKNESS + PangGame.PLAYER_HEIGHT / 2) / PangGame.PPM;
 
 
                 //isShooting = Integer.parseInt(data[2]) == 1 ? true: false;
